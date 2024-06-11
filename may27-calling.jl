@@ -1,7 +1,3 @@
-using Printf
-
-@printf("helo the file opened\n")
-
 include("heisenberg-one-half-dmrg.jl")
 include("ladder-one-half-dmrg.jl")
 include("may28-plotting.jl")
@@ -12,7 +8,8 @@ include("./semi-inactive/exact-diagonalisation.jl")
 
 
 #TODO this has minimum of two particles to allow for heisenberg 1/2 systems, workaround?
-function run(minLength, maxLength, js)
+#note that this function has outdated method names and will not compile
+function run(minPairs, maxPairs, js)
 	len = size(js)[1]
 	xs = zeros(len)
 	ys = zeros(len)
@@ -32,7 +29,7 @@ function run(minLength, maxLength, js)
 		DMRGLaddervHeisenberg = zeros(maxLength)
 		EDLaddervHeisenberg = zeros(maxLength)
 		
-		for i = minLength:maxLength
+		for i = minPairs:maxPairs
 			#find energies
 			@printf("This time we are with Jl %d Jr %d and %d spin pairs\n", Jl, Jr, i)
 			energyLDMRG[i] = main(i,Jl,Jr)[1]
@@ -41,6 +38,7 @@ function run(minLength, maxLength, js)
 			#energyHED[i] = 2*gsE(Hamiltonians.heisenbergOneHalf(i,Jl))	
 				
 			#find percent differences
+			# save the turtles :D
 			ladderDMRGvED[i] = rdiff(energyLDMRG[i],energyLED[i],i)
 			#heisenbergDMRGvED[i] = rdiff(energyHDMRG[i],energyHED[i],i)
 			#DMRGLaddervHeisenberg[i] = rdiff(energyLDMRG[i],energyHDMRG[i],i)
@@ -62,24 +60,28 @@ function run(minLength, maxLength, js)
 		end
 		
 		#plotlin("$j pairs A", true, "x", "y",("Ladder DMRG","Ladder ED","Heis. DMRG","Heis. ED"),energyLDMRG,energyLED,energyHDMRG,energyHED)
-		xs[j] = Jl/Jr
-		ys[j] = ladderDMRGvED[maxLength]	#this assumes
-		
-	end
-	plot2("graph 2", true, "Jl/Jr", "delta E", ("hmm",),(xs,ys))
-end
 
-#m = [10 1;5 1;1 1]
-
-#run(5,5,m)
-
-function myTemp(minPairs,maxPairs,Jl,Jr)
-	E = 0
-	for i = minPairs:maxPairs
-		E = main(i,Jl,Jr)[1]
-		diff = rdiff(E/i,-0.75,i)
-		@printf("Energy: %f\nDifference: %f\n",E,diff)
 	end
 end
 
-myTemp(1,50,0,1)
+function cmpEgsN(minPairs,maxPairs,jVals)
+	len = size(jVals)[1]
+	JrVals = zeros(len)
+	Egs = zeros(len)
+	for i = 1:len
+		JrVals[i] = jVals[i,2]
+	end
+	for i = minPairs:maxPairs	
+		for j = 1:len
+			Jl = jVals[j,1]
+			Jr = JrVals[j]
+			Egs[j] = dmrgLadder(i,Jl,Jr)[1]
+		end
+		plot2("Ground state energy verses Jr strength for $(i) spin pairs",true,"Jr","Egs",[],i,[Egs,JrVals])
+	end
+end
+
+#jl jr
+jVals = [1 100; 1 200; 1 300; 1 500]
+
+cmpEgsN(1,10,jVals)

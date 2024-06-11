@@ -4,7 +4,7 @@ using Random
 
 Random.seed!(6969)
 
-function main(length, jl, jr)
+function dmrgLadder(length, jl, jr)
 	
 	N = length*2
 	Jl = jl		#inter dimer interaction
@@ -43,6 +43,4 @@ function main(length, jl, jr)
 	
 	return [energy, psi]
 end
-
-#main(4,1,1)
 

@@ -49,7 +49,7 @@ function plotlog()
 		#plot!(xscale=:log10, yscale=:log10, minorgrid=true)
 end
 
-function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, data...)
+function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPairs, data...)
 	
 	if (isempty(data)) return end
 	
@@ -74,12 +74,35 @@ function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, data..
 	xlabel!(xAxisTitle)
 	ylabel!(yAxisTitle)
 	
+	xmin = 0
+	xmax = 0
+	
 	for i = 1:ndata
-		scatter!(data[i][1],data[i][2],label=labels[i])
+		x = data[i][1]
+		y = data[i][2]
+		scatter!(x,y,label=labels[i])
+		
+		xmin = min(x,xmin)
+		xmax = max(x,xmax)
 	end
+	
+	plotFunction(lineEgsvsJr,[xmin;xmax],numPairs)
 
 	if save
 		png(title)
 	end	
 	
 end
+
+#expect bounds like [[xmin xmax];[ymin ymax]]
+function plotFunction(f, bounds, N, stepGap=100)
+	x = [i in bounds[1]:stepGap:bounds[2]]
+	y = f.(x,N) 
+	plot!(x,y)
+end
+
+function expectedEnergy(Jr,N)
+	Egs = -0.75*Jr*N
+end
+
+plot2("Ground state energy verses Jr strength for FAKE spin pairs",true,"Jr","Egs",[],3,[[-600; -1200; -2000],[10;20;30]])
