@@ -1,0 +1,101 @@
+erin@debian:~$ cd Main/Julia
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+ERROR: LoadError: ParseError:
+# Error @ /home/erin/Main/Julia/working-hamiltonian.jl:17:3
+		# ie H += []
+		j -= 1
+#		└────┘ ── Expected `)`
+Stacktrace:
+ [1] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:17
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:17
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+ERROR: LoadError: ParseError:
+# Error @ /home/erin/Main/Julia/working-hamiltonian.jl:17:3
+		# ie H += []
+		j = j - 1
+#		└───────┘ ── Expected `)`
+Stacktrace:
+ [1] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:17
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:17
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+(2, 2)
+(2, 2)
+ERROR: LoadError: MethodError: no method matching kron(::Int64, ::Matrix{Union{Missing, Number}}, ::Matrix{Union{Missing, Number}})
+You may have intended to import Base.kron
+
+Closest candidates are:
+  kron(::Number, ::Any)
+   @ Main ~/Main/Julia/kronecker-product.jl:29
+  kron(::Number, ::Number)
+   @ Main ~/Main/Julia/kronecker-product.jl:33
+  kron(::Matrix, ::Matrix)
+   @ Main ~/Main/Julia/kronecker-product.jl:1
+
+Stacktrace:
+ [1] MPO(particles::Int64)
+   @ Main ~/Main/Julia/working-hamiltonian.jl:13
+ [2] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:32
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:32
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+(2, 2)
+(2, 2)
+ERROR: LoadError: MethodError: no method matching kron(::Int64, ::Matrix{Union{Missing, Number}}, ::Matrix{Union{Missing, Number}})
+You may have intended to import Base.kron
+
+Closest candidates are:
+  kron(::Number, ::Any)
+   @ Main ~/Main/Julia/kronecker-product.jl:29
+  kron(::Number, ::Number)
+   @ Main ~/Main/Julia/kronecker-product.jl:33
+  kron(::Matrix, ::Matrix)
+   @ Main ~/Main/Julia/kronecker-product.jl:1
+
+Stacktrace:
+ [1] MPO(particles::Int64)
+   @ Main ~/Main/Julia/working-hamiltonian.jl:14
+ [2] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:33
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:33
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+(2, 2)
+(2, 2)
+ERROR: LoadError: MethodError: no method matching kron(::Int64, ::Matrix{Float64}, ::Matrix{Float64})
+You may have intended to import Base.kron
+
+Closest candidates are:
+  kron(::Number, ::Any)
+   @ Main ~/Main/Julia/kronecker-product.jl:30
+  kron(::Number, ::Number)
+   @ Main ~/Main/Julia/kronecker-product.jl:34
+  kron(::Matrix, ::Matrix)
+   @ Main ~/Main/Julia/kronecker-product.jl:1
+
+Stacktrace:
+ [1] MPO(particles::Int64)
+   @ Main ~/Main/Julia/working-hamiltonian.jl:14
+ [2] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:33
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:33
+erin@debian:~/Main/Julia$ julia working-hamiltonian.jl 
+(2, 2)
+(2, 2)
+(4, 4)
+ERROR: LoadError: DimensionMismatch: dimensions must match: a has dims (Base.OneTo(4), Base.OneTo(4)), b has dims (Base.OneTo(16), Base.OneTo(16)), mismatch at 1
+Stacktrace:
+ [1] promote_shape
+   @ ./indices.jl:178 [inlined]
+ [2] promote_shape(a::Matrix{Float64}, b::Matrix{Float64})
+   @ Base ./indices.jl:169
+ [3] +(A::Matrix{Float64}, Bs::Matrix{Float64})
+   @ Base ./arraymath.jl:14
+ [4] MPO(particles::Int64)
+   @ Main ~/Main/Julia/working-hamiltonian.jl:14
+ [5] top-level scope
+   @ ~/Main/Julia/working-hamiltonian.jl:33
+in expression starting at /home/erin/Main/Julia/working-hamiltonian.jl:33
+erin@debian:~/Main/Julia$ 
+
