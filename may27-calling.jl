@@ -77,11 +77,11 @@ function cmpEgsN(minPairs,maxPairs,jVals)
 			Jr = JrVals[j]
 			Egs[j] = dmrgLadder(i,Jl,Jr)[1]
 		end
-		plot2("Ground state energy verses Jr strength for $(i) spin pairs",true,"Jr","Egs",[],i,JrVals,Egs)
+		plot2("Ground state energy verses Jr strength for $(i) spin pairs, large range",true,"Jr","Egs",[],i,JrVals,Egs)
 	end
 end
 
 jl = 1*10^(1)
-jVals = [jl 1; jl 10; jl 100; jl 1000;jl 2000]
+jVals = [jl 1; jl 10; jl 100; jl 1000;jl 10000]
 
 cmpEgsN(1,10,jVals)
