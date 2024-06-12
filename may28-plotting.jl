@@ -79,7 +79,7 @@ function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPai
 	
 	for i = 1:2:ndata
 		xVals = data[i]
-		yVals = data[i+1]
+		yVals = data[i+1]	#*
 		
 		scatter!(xVals, yVals,label=labels[i])
 		for j = 1:(min(length(xVals),length(yVals)))
@@ -107,5 +107,3 @@ end
 function expectedEnergy(Jr,N)
 	Egs = -0.75*Jr*N
 end
-
-plot2("Ground state energy verses Jr strength for FAKE spin pairs",true,"Jr","Egs",[],3,[-600; -1200; -2000],[10;20;30])
