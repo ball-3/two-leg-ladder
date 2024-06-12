@@ -77,26 +77,29 @@ function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPai
 	xmin = 0
 	xmax = 0
 	
-	for i = 1:ndata
-		x = data[i][1]
-		y = data[i][2]
-		scatter!(x,y,label=labels[i])
+	for i = 1:2:ndata
+		xVals = data[i]
+		yVals = data[i+1]
 		
-		xmin = min(x,xmin)
-		xmax = max(x,xmax)
-	end
+		scatter!(xVals, yVals,label=labels[i])
+		for j = 1:(min(length(xVals),length(yVals)))
+			x = xVals[j]
+			y = yVals[j]
+		
+			xmin = min(x,xmin)
+			xmax = max(x,xmax)
+		end
+		plotFunction(expectedEnergy,[xmin;xmax],numPairs)
+		if save
+			png(title)
+		end
 	
-	plotFunction(lineEgsvsJr,[xmin;xmax],numPairs)
-
-	if save
-		png(title)
 	end	
-	
 end
 
 #expect bounds like [[xmin xmax];[ymin ymax]]
 function plotFunction(f, bounds, N, stepGap=100)
-	x = [i in bounds[1]:stepGap:bounds[2]]
+	x = [i for i in bounds[1]:stepGap:bounds[2]]
 	y = f.(x,N) 
 	plot!(x,y)
 end
@@ -105,4 +108,4 @@ function expectedEnergy(Jr,N)
 	Egs = -0.75*Jr*N
 end
 
-plot2("Ground state energy verses Jr strength for FAKE spin pairs",true,"Jr","Egs",[],3,[[-600; -1200; -2000],[10;20;30]])
+plot2("Ground state energy verses Jr strength for FAKE spin pairs",true,"Jr","Egs",[],3,[-600; -1200; -2000],[10;20;30])
