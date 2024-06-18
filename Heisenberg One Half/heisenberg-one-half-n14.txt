@@ -1,2 +1,0 @@
-Final energy = -6.026703925584, n = 14
-Final energy = -6.026703925584, n = 14

@@ -67,17 +67,19 @@ end
 function cmpEgsN(minPairs,maxPairs,jVals)
 	len = size(jVals)[1]
 	JrVals = zeros(len)
+	JlVals = zeros(len)
 	Egs = zeros(len)
 	for i = 1:len
 		JrVals[i] = jVals[i,2]
+		JlVals[i] = jVals[i,1]
 	end
 	for i = minPairs:maxPairs	
 		for j = 1:len
-			Jl = jVals[j,1]
+			Jl = jVals[j]
 			Jr = JrVals[j]
 			Egs[j] = dmrgLadder(i,Jl,Jr)[1]
 		end
-		plot2("Ground state energy verses Jr strength for $(i) spin pairs, large range",true,"Jr","Egs",[],i,JrVals,Egs)
+		plot2("Ground state energy versus Jr strength for $(i) spin pairs, large range",true,"Jr","Egs",[],i,JrVals,JlVals,Egs)
 	end
 end
 

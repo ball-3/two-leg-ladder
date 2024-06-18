@@ -43,4 +43,3 @@ function dmrgLadder(length, jl, jr)
 	
 	return [energy, psi]
 end
-

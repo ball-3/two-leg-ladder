@@ -49,7 +49,7 @@ function plotlog()
 		#plot!(xscale=:log10, yscale=:log10, minorgrid=true)
 end
 
-function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPairs, data...)
+function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPairs, Jl, data...)
 	
 	if (isempty(data)) return end
 	
@@ -89,7 +89,7 @@ function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPai
 			xmin = min(x,xmin)
 			xmax = max(x,xmax)
 		end
-		plotFunction(expectedEnergy,[xmin;xmax],numPairs)
+		plotFunction(expectedEnergy,Jl,[xmin;xmax],numPairs)
 		if save
 			png(title)
 		end
@@ -98,12 +98,15 @@ function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPai
 end
 
 #expect bounds like [[xmin xmax];[ymin ymax]]
-function plotFunction(f, bounds, N, stepGap=100)
+function plotFunction(f,Jl, bounds, N, stepGap=100)
 	x = [i for i in bounds[1]:stepGap:bounds[2]]
-	y = f.(x,N) 
-	plot!(x,y)
+	y = f.(x,Jl,N) 
+	return plot!(x,y)
 end
 
-function expectedEnergy(Jr,N)
-	Egs = -0.75*Jr*N
+function expectedEnergy(Jr,Jl,N)
+	Egs = (-0.75*Jr-0.375*Jl*Jl/Jr)*N
 end
+
+
+
