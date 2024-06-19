@@ -15,8 +15,10 @@ function plot3(nVals,jlVals,jrVals)
 			p[jl,n] = plot3sub([jl,[jrVals[1];jrVals[jrs]],n], jrVals, E)
 		end
 	end			
-	plot(p[1,1],p[1,2],p[1,3],p[1,4],p[1,5],p[2,1],p[2,2],p[2,3],p[2,4],p[2,5],p[3,1],p[3,2],p[3,3],p[3,4],p[3,5],p[4,1],p[4,2],p[4,3],p[4,4],p[4,5],p[5,1],p[5,2],p[5,3],p[5,4],p[5,5],p[6,1],p[6,2],p[6,3],p[6,4],p[6,5],p[7,1],p[7,2],p[7,3],p[7,4],p[7,5], layout=(rows,cols), legend = false)
+	#plot(p[1,1],p[1,2],p[1,3],p[1,4],p[1,5],p[2,1],p[2,2],p[2,3],p[2,4],p[2,5],p[3,1],p[3,2],p[3,3],p[3,4],p[3,5],p[4,1],p[4,2],p[4,3],p[4,4],p[4,5],p[5,1],p[5,2],p[5,3],p[5,4],p[5,5],p[6,1],p[6,2],p[6,3],p[6,4],p[6,5],p[7,1],p[7,2],p[7,3],p[7,4],p[7,5], layout=(rows,cols), legend = false)
+	plot(p[1,1],p[1,2],p[1,3],p[2,1],p[2,2],p[2,3],p[3,1],p[3,2],p[3,3], layout=(rows,cols),legend=false)
 	
+	plot!(size=(3000,2000))
 	png("hewwop")
 end
 
@@ -40,7 +42,11 @@ end
 
 
 nVals = [1;10;100;1000;10000]
-jrVals = [0.1;1;10;100;1000;10000]
+jrVals = [0.1;1;10;100]
 jlVals = [0.0001;0.001;0.01;0.1;1;10;100]
+
+nVals = [1;2;3]
+jrVals = [1;10;100]
+jlVals = [0.1;1;10]
 
 plot3(nVals,jlVals,jrVals)
