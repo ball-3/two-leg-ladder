@@ -30,3 +30,5 @@ function main2(N,jl)
 end
 
 display(main2(4,1)[1]/4)
+#https://journals.aps.org/prb/pdf/10.1103/PhysRevB.34.1677
+#https://journals.aps.org/prb/pdf/10.1103/PhysRevB.47.3196
