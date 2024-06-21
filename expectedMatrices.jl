@@ -55,4 +55,4 @@ function dmrgRES(pairs, ratio)
 	return (dmrgLadder(pairs, jl, jr)[1])/(2*pairs)
 end
 
-compare()
+#compare()

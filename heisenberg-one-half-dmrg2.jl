@@ -8,7 +8,7 @@ function main2(N,jl,operator::String)
 
 	sites = siteinds("S=1/2", N)
 	
-	os = getOperator(operator, N)
+	os = getOperator(operator, N, jl)
 	
 	operator = MPO(os, sites)
 	
@@ -25,7 +25,7 @@ function main2(N,jl,operator::String)
 end
 
 #TODO better way of defining this, rework entirely
-function getOperator(op::String, nsites::Integer)
+function getOperator(op::String, nsites::Integer, jl::Integer)
 	op = lowercase(op)		#force case insensitive
 	
 	if (cmp(op,"hamiltonian")== 0 || cmp(op,"h")== 0 || cmp(op,"ham")== 0)

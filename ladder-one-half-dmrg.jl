@@ -38,11 +38,8 @@ function getOperator(numPairs, jl, jr, operator)
 	return ArgumentError("operator unrecognised e#02")
 end
 
-function hamiltonian(numPairs, jl, jr)
+function hamiltonian(numPairs, Jl, Jr)
 	N = numPairs*2
-	Jl = jl		#inter dimer interaction
-	Jr = jr		#intra dimer interaction
-			#we are testing limit Jr >> Jl
 
 	sites = siteinds("S=1/2", N)
 	
@@ -66,6 +63,7 @@ function hamiltonian(numPairs, jl, jr)
 	return [op, sites]
 end
 
+#TODO fix errors with tupling
 function siteOperator(numPairs, opMatrix)
 	operators1 = opMatrix[1]
 	operators2 = opMatrix[2]	#TODO should i assert that operators1 and operators2 are the same length? probably :S
@@ -100,4 +98,4 @@ end
 
 data = [("Sz",),("I",),(1,2),(1,2)]
 
-display(dmrgLadder(2,1,1,data)[1])
+#display(dmrgLadder(2,1,1,data)[1])

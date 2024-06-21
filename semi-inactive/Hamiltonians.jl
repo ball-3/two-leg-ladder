@@ -23,11 +23,9 @@ function heisenbergOneHalf(spins::Integer, jl)
 	return H/4
 end
 
-function ladderOneHalf(pairs::Integer, jl, jr)
+function ladderOneHalf(pairs::Integer, Jl, Jr)
 	#settings:
 	hbar = 1
-	Jl = jl
-	Jr = jr
 	
 	N = 2*pairs
 	dim = 2^(N)
@@ -36,8 +34,8 @@ function ladderOneHalf(pairs::Integer, jl, jr)
 	j = N-2
 	for i = 0:2:(N-2)
 		#intra dimer interaction (Jr)
-		H += Jr*kron(nthI(i),kron((hbar/2)*σx,kron((hbar/2)*σx,nthI(j))))
-		H += Jr*kron(nthI(i),kron((hbar/2)*σy,kron((hbar/2)*σy,nthI(j))))
+		H += Jr*kron(nthI(i),(hbar/2)*σx,(hbar/2)*σx,nthI(j))
+		H += Jr*kron(nthI(i),(hbar/2)*σy,(hbar/2)*σy,nthI(j))
 		H += Jr*kron(nthI(i),(hbar/2)*σz,(hbar/2)*σz,nthI(j))
 		j -= 2
 	end

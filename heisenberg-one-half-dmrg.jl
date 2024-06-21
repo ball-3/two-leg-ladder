@@ -28,3 +28,5 @@ function main2(N,jl)
 	
 	return [energy, psi]
 end
+
+display(main2(4,1)[1]/4)
