@@ -35,29 +35,30 @@ function run(minPairs, maxPairs, js)
 		ladderLANCvED = zeros(maxPairs)
 		ladderLANCvDMRG = zeros(maxPairs)
 		
-		for i = minPairs:2:maxPairs
+		for i = 1:maxPairs
 			#find energies
+			pairNum = 2*i + 2
 			@printf("This time we are with Jl %f Jr %f and %d spin pairs\n", Jl, Jr, i)
-			energyLDMRG[i] = dmrgLadder(i,Jl,Jr,-1)[1]/(2*i*Jl)
-			energyLED[i] = gsE(Hamiltonians.ladderOneHalf(i,Jl,Jr))/(2*i*Jl)
+			energyLDMRG[i] = dmrgLadder(pairNum,Jl,Jr,-1)[1]
+			energyLED[i] = gsE(Hamiltonians.heisenbergOneHalf(pairNum,Jl))
 			#energyHDMRG[i] = 2*main2(i,Jl)[1]
 			#energyHED[i] = 2*gsE(Hamiltonians.heisenbergOneHalf(i,Jl))	
 				
 			#find percent differences
 			# save the turtles :D
-			ladderDMRGvED[i] = rdiff(energyLDMRG[i],energyLED[i],i)
-			ladderLANCvDMRG[i] = rdiff(lanczos[i+1,j+1],energyLDMRG[i],i)
-			ladderLANCvED[i] = rdiff(lanczos[i+1,j+1],energyLED[i],i)
+			ladderDMRGvED[i] = rdiff(energyLDMRG[i],energyLED[i],i*2)
+			ladderLANCvDMRG[i] = rdiff(lanczos[i+1,j+1]*2*pairNum,energyLDMRG[i],i*2)
+			ladderLANCvED[i] = rdiff(lanczos[i+1,j+1]*2*pairNum,energyLED[i],i*2)
 			#heisenbergDMRGvED[i] = rdiff(energyHDMRG[i],energyHED[i],i)
 			#DMRGLaddervHeisenberg[i] = rdiff(energyLDMRG[i],energyHDMRG[i],i)
 			#EDLaddervHeisenberg[i] = rdiff(energyLED[i],energyHED[i],i)
 		
 			#print energies
-			@printf("This time we are with Jl %f Jr %f and %d spin pairs\n", Jl, Jr, i)
+			@printf("This time we are with Jl %f Jr %f and %d spin pairs\n", Jl, Jr, pairNum)
 			print("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Energies ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~\n")
 			print("Ladder (DMRG): $(energyLDMRG[i])\n")
 			print("Ladder   (ED): $(energyLED[i])\n")
-			print("Ladder (Lanc): $(lanczos[i+1,j+1])\n")
+			print("Ladder (Lanc): $(lanczos[i+1,j+1]*2*pairNum)\n")
 			#print("Heise. (DMRG): $(energyHDMRG[i])\n")
 			#print("Heisenb. (ED): $(energyHED[i])\n")
 			
@@ -99,4 +100,4 @@ jl = 1*10^(1)
 jVals = [jl 1; jl 10; jl 100; jl 1000;jl 10000]
 
 #cmpEgsN(1,10,jVals)
-run(4,4,[1 0;1 0.2;1 0.4;1 0.6;1 0.8;1 1])
+run(1,5,[1 0])

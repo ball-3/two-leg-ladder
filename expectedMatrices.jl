@@ -1,3 +1,5 @@
+using Plots
+
 lanczos = [ NaN 0.0 0.2 0.4 0.6 0.8 1.0;
 	   4 -0.500000 -0.503782 -0.515856 -0.536654 -0.565808 -0.602511;
 	   6 -0.467133 -0.472005 -0.487058 -0.511605 -0.544412 -0.584437;
@@ -25,6 +27,7 @@ function compare()
 	vsLanczos = zeros(9,7)
 	vsMC = zeros(9,7)
 	
+	#setting up column and row labels
 	for i = 1:7
 		vsLanczos[1,i] = lanczos[1,i]
 		vsMC[1,i] = montecarlo[1,i]
@@ -34,12 +37,20 @@ function compare()
 		vsMC[i,1] = montecarlo[i,1]
 	end
 
-	for i = 2:9
+	for i = 2:4#should be nine but ignoring infinite case
 		for j = 2:7
 		#i is num of spin pairs
 		#E0/2LJ
-			vsLanczos[i,j] = rdiff(lanczos[i,j],dmrgRES(i,1),i*2)
-			vsMC[i,j] = rdiff(montecarlo[i,j],dmrgRES(i,1),i*2)
+			numPairs = lanczos[i,1]
+			ratio = lanczos[1,j]
+			dmrg = dmrgRES(numPairs,ratio)
+			print("$(i) and $(j) , ratio; $(ratio), numPairs = $(numPairs)\n")
+			#print("Lanczos: $(lanczos[i,j]) DMRG: $(dmrg)\n")
+			#vsLanczos[i,j] = rdiff(lanczos[i,j],dmrg,numPairs*2)
+			#vsMC[i,j] = rdiff(montecarlo[i,j],dmrg,numPairs*2)
+			EperSite = -(3/8)*(ratio)-(3/16)*(1/ratio)
+			vsLanczos[i,j] = rdiff(dmrg,EperSite,numPairs*2)
+			vsMC[i,j] = rdiff(dmrg,EperSite,numPairs*2)
 		end
 	end
 	print("Lanczos:\n")
@@ -49,10 +60,33 @@ function compare()
 
 end
 
-function dmrgRES(pairs, ratio)
-	jr = 1*ratio
-	jl = 1
-	return (dmrgLadder(pairs, jl, jr)[1])/(2*pairs)
+function plotComparison(col)
+	x = [4;6;8;10;12;24]
+	yLanc = [lanczos[i,col] for i in 2:8]
+	yMC = [montecarlo[i,col] for i in 2:8]
+	ratio = lanczos[1,col]
+	val = -(3/8)*(ratio)-(3/16)*(10000/ratio)
+	yCalc = [val;val;val;val;val;val;val]
+	
+	yDMRG = [dmrgRES(i,ratio) for i in 2:8]
+
+	plot()	
+	scatter!(x,yLanc, ms = 10, label="lanczos results")
+	scatter!(x,yMC, ms = 7, label="montecarlo results")
+	scatter!(x,yDMRG, ms = 5, label="dmrg results")
+	if col != 2
+		scatter!(x,yCalc,label="function results")
+	end
+	
+	png("results for jr = $(ratio) and jl = 1 attempt two")
 end
 
-#compare()
+function dmrgRES(pairs, ratio)
+	jl = 1
+	jr = jl*ratio
+	return (dmrgLadder(pairs, jl, jr,-1)[1])/(2*pairs*jl)
+end
+
+for i = 2:7
+	plotComparison(i)
+end

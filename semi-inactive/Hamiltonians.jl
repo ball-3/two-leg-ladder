@@ -9,18 +9,16 @@ function heisenbergOneHalf(spins::Integer, jl)
 #a hamiltonian of H = JΣᵢSi(dot)Si+1 = JΣᵢ(1/2*SxiSxi+1 + 1/2*SyiSyi+1 SziSz+1) and all particles spin 1/2
 	dim = 2^spins
 	H = zeros(dim,dim)
+	hbar = 1
 	j = (spins-2)
 
 	for i = 0:(spins-2)
-		#do pauli x tensors
-		H += jl*kron(nthI(i),σx,σx,nthI(j))
-		#do pauli y tensors
-		H += jl*kron(nthI(i),σy,σy,nthI(j))
-		#do pauli z tensors
-		H += jl*kron(nthI(i),σz,σz,nthI(j))
+		H += jl*kron(nthI(i),(hbar/2)*σx,(hbar/2)*σx,nthI(j))
+		H += jl*kron(nthI(i),(hbar/2)*σy,(hbar/2)*σy,nthI(j))
+		H += jl*kron(nthI(i),(hbar/2)*σz,(hbar/2)*σz,nthI(j))
 		j -= 1
 	end
-	return H/4
+	return H
 end
 
 function ladderOneHalf(pairs::Integer, Jl, Jr)

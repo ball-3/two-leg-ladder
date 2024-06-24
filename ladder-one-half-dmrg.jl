@@ -39,7 +39,7 @@ function getOperator(numPairs, jl, jr, operator)
 end
 
 function hamiltonian(numPairs, Jl, Jr)
-	N = numPairs*2
+	N = Int(numPairs*2)
 
 	sites = siteinds("S=1/2", N)
 	
