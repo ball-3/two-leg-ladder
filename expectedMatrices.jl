@@ -61,38 +61,42 @@ function compare()
 end
 
 function plotComparison(col)
-	#x = [1;2;3;4;5;6]
-	#TODO put back in 
-	x = [4;6;8;10;12;24]
+	x = [1;2;3;4;5;6;12;24;26]
+	#TODO put back in x = [4;6;8;10;12;24]
 	yLanc = [lanczos[i,col] for i in 2:8]
 	yMC = [montecarlo[i,col] for i in 2:8]
 	ratio = lanczos[1,col]
-	val = -(3/8)*(ratio)-(3/16)*(1/ratio)
-	yCalc = [val;val;val;val;val;val;val]
+	#TODO put back in val = -(3/8)*(ratio)-(3/16)*(1/ratio)
+	val = -0.4431
+	val2 = -0.4317
+	#yCalc = [val;val;val;val;val;val;val]
+	yCalc = [val;val;val;val;val;val;val;val;val;val]
+	yEst = [val2;val2;val2;val2;val2;val2;val2;val2;val2;val2]
 	
-	yDMRG = [dmrgRES(x[i],ratio) for i in 1:6]
+	yDMRG = [dmrgRES(x[i],ratio) for i in 1:length(x)]
 
 	plot()	
-	#TODO put back in 
-	scatter!(x,yLanc, ms = 10, label="lanczos results")
-	#TODO put back in 
-	scatter!(x,yMC, ms = 7, label="montecarlo results")
-	scatter!(x,yDMRG, ms = 5, label="dmrg results")
+	#TODO put back in scatter!(x,yLanc, ms = 10, label="lanczos results")
+	#TODO put back in scatter!(x,yMC, ms = 7, label="montecarlo results")
+	scatter!([2;4],[-0.75/2;-1.616025/4], ms = 5, label="tutorial results")
+	scatter!(x,yCalc, label ="function results")
+	scatter!(x,yEst, label ="paper results")
+	scatter!(x,yDMRG, ms = 2, label="dmrg results")
 	#=if col != 2
 		scatter!(x,yCalc,label="function results")
 	end=#
 	
-	png("didnt divide by two? jr = $(ratio) and jl = 1")
+	png("heisenberg chain exact value comparison")
 end
 
 function dmrgRES(pairs, ratio)
 	jl = 1
 	jr = jl*ratio
-	return (dmrgLadder(pairs, jl, jr,-1)[1])/(pairs*jl)
+	return (dmrgLadder(pairs, jl, jr,-1)[1])/(2*pairs*jl)
 end
 
-for i = 2:7
+#=for i = 2:7
 	plotComparison(i)
-end
+end=#
 
-#display(dmrgRES(3,1))
+plotComparison(2)
