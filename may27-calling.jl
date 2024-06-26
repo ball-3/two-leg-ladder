@@ -82,6 +82,7 @@ function cmpEgsN(minPairs,maxPairs,jVals)
 	JlVals = zeros(len)
 	EDgse = zeros(len)
 	DMRGgse = zeros(len)
+	EXPgse = zeros(len)
 	for i = 1:len
 		JrVals[i] = jVals[i,2]
 		JlVals[i] = jVals[i,1]
@@ -90,11 +91,17 @@ function cmpEgsN(minPairs,maxPairs,jVals)
 		for j = 1:len
 			Jl = JlVals[j]
 			Jr = JrVals[j]
-			EDgse[j] = gsE(Hamiltonians.ladderOneHalf(i,Jl,Jr))
-			DMRGgse[j] = dmrgLadder(i,Jl,Jr)[1]
+			#EDgse[j] = gsE(Hamiltonians.ladderOneHalf(i,Jl,Jr))/(2*i)
+			try
+				DMRGgse[j] = dmrgLadder(i,Jl,Jr)[1]/(2*i)
+				EXPgse[j] = (-0.75*Jr-0.375*Jl*Jl/Jr)/2
+			catch e
+				DMRGgse[j] = 0
+				EXPgse[j] = 0
+			end
 		end
 		#plot2("Ground state energy versus Jr strength for $(i) spin pairs, large range",true,"Jr","Egs",[],i,JrVals,JlVals,Egs)
-		plot2("Ground state energy verses Jr strength for $(i) spin pairs, ED and DMRG",true,"Jl","Egs",[],i,JlVals,EDgse,DMRGgse)
+		plot2("Ground state energy versus Jr strength for $(i) spin pairs, ED and DMRG",true,"Jl","Egs",["Function";"Jl";"DMRG"],i,JlVals,EXPgse,JlVals,DMRGgse)
 		#plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPairs, Jl, data...)
 	end
 end
@@ -108,5 +115,5 @@ for i in 1:length(jlVals)
 	jVals[i,2] = jr
 end
 
-cmpEgsN(1,5,jVals)
+cmpEgsN(1,10,jVals)
 #run(4,4,[1 0;1 0.2;1 0.4;1 0.6;1 0.8;1 1])
