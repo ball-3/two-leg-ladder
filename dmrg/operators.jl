@@ -6,15 +6,21 @@ function CustOp(sites, state, operators, sitesApplied, prodNum)
 		print("WARNING: one or more operators specified have no state to apply to and will be ignored\n")
 	end
 	
-	print("This function is for testing and doesnt actually work yet\n")
 	os = OpSum()
-	for j in 1:(numSitesApplied-1)
+	#TODO the following needs thorough testing
+	#=
+	for j in 1:prodNum:(numSitesApplied)
+		
+		os += operators[j], sitesApplied[j]
 
-		#for k in 1:prodNum
-			#inter dimer
-			os += operators[j], sitesApplied[j]
-			os *= operators[j+1], sitesApplied[j+1]
-		#end
+		for k in 1:(prodNum-1)
+			os *= operators[j+k], sitesApplied[j+k]
+		end
+	end
+	=#
+	for j in 1:Integer(numSitesApplied/2)
+		os += operators[j], sitesApplied[j]
+		os *= operators[j+1], sitesApplied[j+1]
 	end
 
 	op = MPO(os, sites)

@@ -28,7 +28,7 @@ function callingSpSmTest(n)
 	
 	#for i in 1:(tn-1)
 		#sum += CustOp(groundState,[S⁺*S⁻, S⁻*S⁺],[1,2])
-		sum += CustOp(groundState,[S⁻*S⁺],[1])
+		sum += CustOp(groundState,[0.5*σz,0.5*σz],[1,2])
 	#end
 	display(sum)
 
@@ -37,60 +37,53 @@ function callingSpSmTest(n)
 	groundStateWFCT = groundState[2]
 	sites = groundState[3]
 	print("\nDMRG expectation ")
-	display(CustOp(sites,groundStateWFCT,["S- * S+"],[1]))
+	display(SzSz(sites,groundStateWFCT))
 	#display(CustOp(sites,groundStateWFCT,["S+ * S-","S- * S+"],[1,2]))
 	
 end
 
-function callingABCTest(n)
-	groundState = ED(Hamiltonians.ladderOneHalf(n,1,1))[2][1]
-	tn = 2*n
-	sigma = [σx,σy,σz]
+function callingABCTest(nPairs)
+	sigma = 0.5*[σx,σy,σz]
+	sigmaStr = ["Sx","Sy","Sz"]
+	i = 1
 
+	expA, expB, expC = 0, 0, 0
+
+	groundState = ED(Hamiltonians.ladderOneHalf(nPairs,1,1))[2][1]
 
 	for j in 1:3
 		op = [sigma[j],sigma[j]]
-		expA, expB, expC = 0, 0, 0
+		opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
 
-		for i in 1:2:(tn-1)
-			expA += 2*CustOp(groundState,op,[i,i+1])/(tn-1)
-		end
-		for i in 1:(tn-3)
-			expB += CustOp(groundState,op,[i,i+2])/(tn-3)
-			expC += CustOp(groundState,op,[i,i+3])/(tn-3)
-		end
+		expA = CustOp(groundState,op,[i,i+1])
+		expB = CustOp(groundState,op,[i,i+2])
+		expC = CustOp(groundState,op,[i+1,i+3])
 
 		exp = expA - 0.5*expB - 0.5*expC
-		print("ED for spin-spin $(j)\n")
-		display(exp)
+		@printf("Using ED for operator %s  : %f = %f - 1/2 %f - 1/2 %f\n", opStr, exp, expA, expB, expC)
 
 	end
-	
 
-
-	sigmaStr = ["Sx","Sy","Sz"]
-
-	groundState = dmrgLadder(n, 1, 1)
+	groundState = dmrgLadder(nPairs, 1, 1)
 	groundStateWFCT = groundState[2]
 	sites = groundState[3]
 
 	for j in 1:3
 		op = [sigmaStr[j],sigmaStr[j]]
-		expA, expB, expC = 0, 0, 0
+		opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
 
-		for i in 1:2:(tn-1)
-			expA += 2*CustOp(sites,groundStateWFCT,op,[i,i+1],2)/(tn-1)
-		end
-		for i in 1:(tn-3)
-			expB += CustOp(sites,groundStateWFCT,op,[i,i+2],2)/(tn-3)
-			expC += CustOp(sites,groundStateWFCT,op,[i,i+3],2)/(tn-3)
+		expA = CustOp(sites,groundStateWFCT,op,[i,i+1],2)
+
+		if (nPairs > 1)
+			expB = CustOp(sites,groundStateWFCT,op,[i,i+2],2)
+			expC = CustOp(sites,groundStateWFCT,op,[i+1,i+3],2)
 		end
 
 		exp = expA - 0.5*expB - 0.5*expC
-		print("DMRG for spin-spin $(j)\n")
-		display(exp)
+		@printf("Using MPS for operator %s : %f = %f - 1/2 %f - 1/2 %f\n", opStr, exp, expA, expB, expC)
 	end
 end
 
 callingABCTest(1)
 callingABCTest(2)
+callingABCTest(3)
