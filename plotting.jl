@@ -1,6 +1,6 @@
 using Plots
 
-function plot2(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, numPairs, data...)
+function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, data...)
 	
 	if (isempty(data)) return end
 	
