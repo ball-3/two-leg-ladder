@@ -4,16 +4,17 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 	
 	if (isempty(data)) return end
 	
-	ndata = size(data,1)
+	#number of data series
+	nSeries = size(data,1)
 	
-	if ndata > size(labels,1)
+	if nSeries > size(labels,1)
 		ls = size(labels,1)
 		newlabels = String[]
 		#filling empty labels
 		for i = 1:ls
 			push!(newlabels,labels[i])
 		end
-		for i = ls:ndata
+		for i = ls:nSeries
 			push!(newlabels, "untitled$(i+1)")	#this probably shouldnt have a +1, where is the logic error
 		end
 		labels = newlabels
@@ -28,11 +29,11 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 	xmin = 0
 	xmax = 0
 	
-	for i = 1:2:ndata
+	for i = 1:nSeries
 		xVals = data[i]
-		yVals = data[i+1]	#*
+		yVals = data[i+1]
 		
-		scatter!(xVals, yVals,ms = 2*ndata-2*i,label=labels[i])
+		scatter!(xVals, yVals,ms = 2*nSeries-2*i,label=labels[i])
 		for j = 1:(min(length(xVals),length(yVals)))
 			x = xVals[j]
 			y = yVals[j]

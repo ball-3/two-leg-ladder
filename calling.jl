@@ -108,16 +108,19 @@ function makeABCPlot(numDataSets,maxPairs)
 		JrbyJl = Jr/Jl
 		labels[k] = "Jr/Jl : $(JrbyJl)"
 
-		dataA = [[i,0.0] for i in 1:maxPairs]
-		dataB = [[i,0.0] for i in 1:maxPairs]
-		dataC = [[i,0.0] for i in 1:maxPairs]
+		dataAx = [i for i in 1:maxPairs]
+		dataAy = [0.0 for i in 1:maxPairs]
+		dataBx = [i for i in 1:maxPairs]
+		dataBy = [0.0 for i in 1:maxPairs]
+		dataCx = [i for i in 1:maxPairs]
+		dataCy = [0.0 for i in 1:maxPairs]
 
 		for j in 1:maxPairs
 			display(j)
-			display(dataA)
-			dataA[j][2], dataB[j][2], dataC[j][2] = callingABCTest(j,false,true,Jl,Jr)
+			display(dataAy)
+			dataAy[j], dataBy[j], dataCy[j] = callingABCTest(j,false,true,Jl,Jr)
 		end
-		myScatterPlot(title*"$k",true,xTitle,yTitle,labels,dataA,dataB,dataC)
+		myScatterPlot(title*"$k",true,xTitle,yTitle,labels,dataAx,dataAy,dataBx,dataBy,dataCx,dataCy)
 	end
 	#TODO plot
 end
