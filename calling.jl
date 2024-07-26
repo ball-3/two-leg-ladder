@@ -97,7 +97,7 @@ function makeABCPlot(numDataSets,maxPairs)
 	yTitle = "spin-spin correlation"
 	save = true
 	
-	labels = ["" for i in 1:2*numDataSets]
+	labels = ["$i" for i in 1:2*numDataSets]
 	multiDataAy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
 	multiDataBy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
 	multiDataCy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
@@ -108,7 +108,7 @@ function makeABCPlot(numDataSets,maxPairs)
 	Jl = 1000
 	for k in 1:numDataSets
 
-		Jl/(10*k)
+		Jl = Jl/(10)
 		JrbyJl = Jr/Jl
 		labels[2*k-1] = "Jr/Jl : $(JrbyJl)"
 
