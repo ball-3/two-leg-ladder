@@ -97,7 +97,11 @@ function makeABCPlot(numDataSets,maxPairs)
 	yTitle = "spin-spin correlation"
 	save = true
 	
-	labels = ["" for i in numDataSets]
+	labels = ["" for i in 1:2*numDataSets]
+	multiDataAy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
+	multiDataBy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
+	multiDataCy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
+	datax = [i for i in 1:maxPairs]
 
 	#TODO initialise data
 	Jr = 1
@@ -106,13 +110,10 @@ function makeABCPlot(numDataSets,maxPairs)
 
 		Jl/(10*k)
 		JrbyJl = Jr/Jl
-		labels[k] = "Jr/Jl : $(JrbyJl)"
+		labels[2*k-1] = "Jr/Jl : $(JrbyJl)"
 
-		dataAx = [i for i in 1:maxPairs]
 		dataAy = [0.0 for i in 1:maxPairs]
-		dataBx = [i for i in 1:maxPairs]
 		dataBy = [0.0 for i in 1:maxPairs]
-		dataCx = [i for i in 1:maxPairs]
 		dataCy = [0.0 for i in 1:maxPairs]
 
 		for j in 1:maxPairs
@@ -120,9 +121,14 @@ function makeABCPlot(numDataSets,maxPairs)
 			display(dataAy)
 			dataAy[j], dataBy[j], dataCy[j] = callingABCTest(j,false,true,Jl,Jr)
 		end
-		myScatterPlot(title*"$k",true,xTitle,yTitle,labels,dataAx,dataAy,dataBx,dataBy,dataCx,dataCy)
+
+		multiDataAy[k] = dataAy
+		multiDataBy[k] = dataBy
+		multiDataCy[k] = dataCy
 	end
-	#TODO plot
+	myScatterPlot(title*"A",true,xTitle,yTitle,labels,datax,multiDataAy[1],datax,multiDataAy[2],datax,multiDataAy[3],datax,multiDataAy[4])
+	myScatterPlot(title*"B",true,xTitle,yTitle,labels,datax,multiDataBy[1],datax,multiDataBy[2],datax,multiDataBy[3],datax,multiDataBy[4])
+	myScatterPlot(title*"C",true,xTitle,yTitle,labels,datax,multiDataCy[1],datax,multiDataCy[2],datax,multiDataCy[3],datax,multiDataCy[4])
 end
 
-makeABCPlot(2,5)
+makeABCPlot(4,10)

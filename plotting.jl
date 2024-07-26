@@ -29,7 +29,7 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 	xmin = 0
 	xmax = 0
 	
-	for i = 1:nSeries
+	for i = 1:2:nSeries
 		xVals = data[i]
 		yVals = data[i+1]
 		
