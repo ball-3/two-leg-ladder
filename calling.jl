@@ -131,4 +131,4 @@ function makeABCPlot(numDataSets,maxPairs)
 	myScatterPlot(title*"C",true,xTitle,yTitle,labels,datax,multiDataCy[1],datax,multiDataCy[2],datax,multiDataCy[3],datax,multiDataCy[4])
 end
 
-makeABCPlot(4,10)
+
