@@ -209,4 +209,5 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-MMMfig5cmp()
+hi = (5>3)
+callingABCTest(3,hi,hi,1,0.1)
