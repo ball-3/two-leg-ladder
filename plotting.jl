@@ -1,5 +1,7 @@
 using Plots
 
+markershapes = [:circle;:circle;:star5;:star5;:rect;:rect;:h;:h;:star7;:star7;:ltriangle;:ltriangle;:star4;:star4;:utriangle;:utriangle;:dtriangle;:dtriangle]
+
 function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, data...)
 	
 	if (isempty(data)) return end
@@ -33,7 +35,12 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 		xVals = data[i]
 		yVals = data[i+1]
 		
-		scatter!(xVals, yVals,ms = 2*nSeries-2*i,label=labels[i])
+		if (nSeries < 6)
+			scatter!(xVals, yVals,ms = 2*nSeries-2*i,label=labels[i])
+		else
+			scatter!(xVals, yVals,ms = 4, shape = markershapes[i%(length(markershapes))] ,label=labels[i])
+		end
+
 		for j = 1:(min(length(xVals),length(yVals)))
 			x = xVals[j]
 			y = yVals[j]

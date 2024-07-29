@@ -177,7 +177,7 @@ function MMMfig5cmp()
 	savePlot = true
 	xTitle = "J2 / |J1|"
 	yTitle = "correlation"
-	labels = ["c12";"c34";"c56";"c13";"c35";"c57";"c14";"c36";"c58"]
+	labels = ["c12";"";"c34";"";"c56";"";"c13";"";"c35";"";"c57";"";"c14";"";"c36";"";"c58"]
 	xVals = [-4+i for i in 0:8]
 
 	myScatterPlot(title, savePlot, xTitle, yTitle, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, [-4;-4],[-0.25;0.10])
