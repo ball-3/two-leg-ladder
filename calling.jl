@@ -43,11 +43,10 @@ function callingSpSmTest(n)
 	
 end
 
-function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr)
+function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr, site1, site2)
 	sigma = 0.5*[σx,σy,σz]
 	sigmaStr = ["Sx","Sy","Sz"]
-	i = 1
-
+	
 	expA, expB, expC = 0, 0, 0
 
 	if(ED)
@@ -57,9 +56,9 @@ function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr)
 			op = [sigma[j],sigma[j]]
 			opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
 
-			expA = CustOp(groundState,op,[i,i+1])
-			expB = CustOp(groundState,op,[i,i+2])
-			expC = CustOp(groundState,op,[i+1,i+3])
+			expA = CustOp(groundState,op,[site1,site2])
+			#expB = CustOp(groundState,op,[i,i+2])
+			#expC = CustOp(groundState,op,[i+1,i+3])
 
 			exp = expA - 0.5*expB - 0.5*expC
 			#@printf("Using ED for operator %s  : %f = %f - 1/2 %f - 1/2 %f\n", opStr, exp, expA, expB, expC)
@@ -76,23 +75,22 @@ function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr)
 			op = [sigmaStr[j],sigmaStr[j]]
 			opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
 
-			expA = CustOp(sites,groundStateWFCT,op,[i,i+1],2)
+			expAMPO = CustOp(sites,groundStateWFCT,op,[site1,site2],2)
+			return [expA, expAMPO]
 
 			if (nPairs > 1)
-				expB = CustOp(sites,groundStateWFCT,op,[i,i+2],2)
-				expC = CustOp(sites,groundStateWFCT,op,[i+1,i+3],2)
+				#expB = CustOp(sites,groundStateWFCT,op,[i,i+2],2)
+				#expC = CustOp(sites,groundStateWFCT,op,[i+1,i+3],2)
 			end
 
 			#TODO this is a temp change to fit my plot fct, edit later?
 			return [expA,expB,expC]
-			#exp = expA - 0.5*expB - 0.5*expC
-			#@printf("Using MPS for operator %s : %f = %f - 1/2 %f - 1/2 %f\n", opStr, exp, expA, expB, expC)
 		end
 	end
 end
 
 function makeABCPlot(numDataSets,maxPairs)
-	title = "Spin-Spin correlations as a function of Coupling Strength"
+	title = "''Spin-Spin correlations as a function of Coupling Strength"
 	xTitle = "number of site pairs"
 	yTitle = "spin-spin correlation"
 	save = true
@@ -126,9 +124,9 @@ function makeABCPlot(numDataSets,maxPairs)
 		multiDataBy[k] = dataBy
 		multiDataCy[k] = dataCy
 	end
-	myScatterPlot(title*"A",true,xTitle,yTitle,labels,datax,multiDataAy[1],datax,multiDataAy[2],datax,multiDataAy[3],datax,multiDataAy[4])
-	myScatterPlot(title*"B",true,xTitle,yTitle,labels,datax,multiDataBy[1],datax,multiDataBy[2],datax,multiDataBy[3],datax,multiDataBy[4])
-	myScatterPlot(title*"C",true,xTitle,yTitle,labels,datax,multiDataCy[1],datax,multiDataCy[2],datax,multiDataCy[3],datax,multiDataCy[4])
+	myScatterPlot(title*"A",save,xTitle,yTitle,labels,datax,multiDataAy[1],datax,multiDataAy[2],datax,multiDataAy[3],datax,multiDataAy[4])
+	myScatterPlot(title*"B",save,xTitle,yTitle,labels,datax,multiDataBy[1],datax,multiDataBy[2],datax,multiDataBy[3],datax,multiDataBy[4])
+	myScatterPlot(title*"C",save,xTitle,yTitle,labels,datax,multiDataCy[1],datax,multiDataCy[2],datax,multiDataCy[3],datax,multiDataCy[4])
 end
 
 #function to plot figure 4 from ground state magnetic properties of spin ladder shaped quantum nanomagnet: exact diagonalisation study
@@ -209,5 +207,36 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-hi = (5>3)
-callingABCTest(3,hi,hi,1,0.1)
+function terrible(val::Bool)
+	return val
+end
+
+#callingABCTest(1,terrible(false),terrible(false),1,1)
+#callingABCTest(1,false,false,1,1)
+
+#=
+groundState = ED(Hamiltonians.ladderOneHalf(4,1,1))[2][1]
+c12 = CustOp(groundState,[σz,σz],[8,1])
+c34 = CustOp(groundState,[σz,σz],[4,3])
+c56 = CustOp(groundState,[σz,σz],[6,5])
+c78 = CustOp(groundState,[σz,σz],[8,7])
+c58 = CustOp(groundState,[σz,σz],[5,8])
+c67 = CustOp(groundState,[σz,σz],[6,7])
+
+print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
+=#
+#=
+groundState = dmrgLadder(4, 1, 1)
+		groundStateWFCT = groundState[2]
+		sites = groundState[3]
+c12 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[1,2],2)
+c34 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[3,4],2)
+c56 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[5,6],2)
+c78 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[7,8],2)
+c58 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[5,5],2)
+c67 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[6,7],2)
+
+print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
+=#
+
+makeABCPlot(4,10)
