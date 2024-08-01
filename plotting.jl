@@ -22,7 +22,7 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 		labels = newlabels
 	end
 	
-	plot()
+	plot(dpi = 600)
 	plot!(legend=:topright)
 	title!(title)
 	xlabel!(xAxisTitle)
@@ -38,7 +38,7 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 		if (nSeries < 6)
 			scatter!(xVals, yVals,ms = 2*nSeries-2*i,label=labels[i])
 		else
-			scatter!(xVals, yVals,ms = 4, shape = markershapes[i%(length(markershapes))] ,label=labels[i])
+			scatter!(xVals, yVals,ms = 6, shape = markershapes[i%(length(markershapes))] ,label=labels[i], alpha = 0.5)
 		end
 
 		for j = 1:(min(length(xVals),length(yVals)))

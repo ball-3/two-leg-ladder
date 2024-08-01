@@ -28,5 +28,3 @@ function main2(N,jl)
 	
 	return [energy, psi]
 end
-
-

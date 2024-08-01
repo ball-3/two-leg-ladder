@@ -1,7 +1,7 @@
 include("./utility-functions/comparison-functions.jl")
 include("plotting.jl")
 
-include("./dmrg/heisenberg.jl")
+include("./dmrg/chain.jl")
 include("./dmrg/ladder.jl")
 include("./dmrg/operators.jl")
 
@@ -43,13 +43,13 @@ function callingSpSmTest(n)
 	
 end
 
-function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr, site1, site2)
+function callingABCTest(nPairs, doED::Bool, doMPS::Bool, Jl, Jr, site1, site2)
 	sigma = 0.5*[σx,σy,σz]
 	sigmaStr = ["Sx","Sy","Sz"]
 	
 	expA, expB, expC = 0, 0, 0
 
-	if(ED)
+	if(doED)
 		groundState = ED(Hamiltonians.ladderOneHalf(nPairs,Jl,Jr))[2][1]
 
 		for j in 1:3
@@ -66,7 +66,7 @@ function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr, site1, site2)
 		end
 	end
 
-	if(MPS)
+	if(doMPS)
 		groundState = dmrgLadder(nPairs, Jl, Jr)
 		groundStateWFCT = groundState[2]
 		sites = groundState[3]
@@ -89,44 +89,41 @@ function callingABCTest(nPairs, ED::Bool, MPS::Bool, Jl, Jr, site1, site2)
 	end
 end
 
-function makeABCPlot(numDataSets,maxPairs)
-	title = "''Spin-Spin correlations as a function of Coupling Strength"
-	xTitle = "number of site pairs"
+function makeABCPlot(numPairs,Jl,Jr)
+	numDataSets = 16
+	title = "correlations by site pair"
+	xTitle = "site pair"
 	yTitle = "spin-spin correlation"
 	save = true
 	
-	labels = ["$i" for i in 1:2*numDataSets]
-	multiDataAy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
-	multiDataBy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
-	multiDataCy = [[0.0 for i in 1:maxPairs] for j in 1:numDataSets]
-	datax = [i for i in 1:maxPairs]
+	labels = ["c12-e";"";"c12-m";"";"c21-e";"";"c21-m";"";"c34-e";"";"c34-m";"";"c43-e";"";"c43-m";"";"c56-e";"";"c56-m";"";"c65-e";"";"c65-m";"";"c78-e";"";"c78-m";"";"c87-e";"";"c87-m";"";]
+	c12e, c12m = callingABCTest(numPairs,true,true,Jl,Jr,1,2)
+	c21e, c21m = callingABCTest(numPairs,true,true,Jl,Jr,2,1)
+	c34e, c34m = callingABCTest(numPairs,true,true,Jl,Jr,3,4)
+	c43e, c43m = callingABCTest(numPairs,true,true,Jl,Jr,4,3)
+	c56e, c56m = callingABCTest(numPairs,true,true,Jl,Jr,5,6)
+	c65e, c65m = callingABCTest(numPairs,true,true,Jl,Jr,6,5)
+	c78e, c78m = callingABCTest(numPairs,true,true,Jl,Jr,7,8)
+	c87e, c87m = callingABCTest(numPairs,true,true,Jl,Jr,8,7)
 
-	#TODO initialise data
-	Jr = 1
-	Jl = 1000
-	for k in 1:numDataSets
-
-		Jl = Jl/(10)
-		JrbyJl = Jr/Jl
-		labels[2*k-1] = "Jr/Jl : $(JrbyJl)"
-
-		dataAy = [0.0 for i in 1:maxPairs]
-		dataBy = [0.0 for i in 1:maxPairs]
-		dataCy = [0.0 for i in 1:maxPairs]
-
-		for j in 1:maxPairs
-			display(j)
-			display(dataAy)
-			dataAy[j], dataBy[j], dataCy[j] = callingABCTest(j,false,true,Jl,Jr)
-		end
-
-		multiDataAy[k] = dataAy
-		multiDataBy[k] = dataBy
-		multiDataCy[k] = dataCy
-	end
-	myScatterPlot(title*"A",save,xTitle,yTitle,labels,datax,multiDataAy[1],datax,multiDataAy[2],datax,multiDataAy[3],datax,multiDataAy[4])
-	myScatterPlot(title*"B",save,xTitle,yTitle,labels,datax,multiDataBy[1],datax,multiDataBy[2],datax,multiDataBy[3],datax,multiDataBy[4])
-	myScatterPlot(title*"C",save,xTitle,yTitle,labels,datax,multiDataCy[1],datax,multiDataCy[2],datax,multiDataCy[3],datax,multiDataCy[4])
+	myScatterPlot(title*"A",save,xTitle,yTitle,labels,
+	[1], [Float64(c12e)],
+	[1], [Float64(c12m)],
+	[1], [Float64(c21e)],
+	[1], [Float64(c21m)],
+	[2], [Float64(c34e)],
+	[2], [Float64(c34m)],
+	[2], [Float64(c43e)],
+	[2], [Float64(c43m)],
+	[3], [Float64(c56e)],
+	[3], [Float64(c56m)],
+	[3], [Float64(c65e)],
+	[3], [Float64(c65m)],
+	[4], [Float64(c78e)],
+	[4], [Float64(c78m)],
+	[4], [Float64(c87e)],
+	[4], [Float64(c87m)]
+	)
 end
 
 #function to plot figure 4 from ground state magnetic properties of spin ladder shaped quantum nanomagnet: exact diagonalisation study
@@ -239,4 +236,4 @@ c67 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[6,7],2)
 print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
 =#
 
-makeABCPlot(4,10)
+makeABCPlot(4,1,1)
