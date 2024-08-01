@@ -96,33 +96,33 @@ function makeABCPlot(numPairs,Jl,Jr)
 	yTitle = "spin-spin correlation"
 	save = true
 	
-	labels = ["c12-e";"";"c12-m";"";"c21-e";"";"c21-m";"";"c34-e";"";"c34-m";"";"c43-e";"";"c43-m";"";"c56-e";"";"c56-m";"";"c65-e";"";"c65-m";"";"c78-e";"";"c78-m";"";"c87-e";"";"c87-m";"";]
-	c12e, c12m = callingABCTest(numPairs,true,true,Jl,Jr,1,2)
-	c21e, c21m = callingABCTest(numPairs,true,true,Jl,Jr,2,1)
-	c34e, c34m = callingABCTest(numPairs,true,true,Jl,Jr,3,4)
-	c43e, c43m = callingABCTest(numPairs,true,true,Jl,Jr,4,3)
-	c56e, c56m = callingABCTest(numPairs,true,true,Jl,Jr,5,6)
-	c65e, c65m = callingABCTest(numPairs,true,true,Jl,Jr,6,5)
-	c78e, c78m = callingABCTest(numPairs,true,true,Jl,Jr,7,8)
-	c87e, c87m = callingABCTest(numPairs,true,true,Jl,Jr,8,7)
+	labels = ["c13-e";"";"c13-m";"";"c24-e";"";"c24-m";"";"c35-e";"";"c35-m";"";"c46-e";"";"c46-m";"";"c57-e";"";"c57-m";"";"c65-e";"";"c65-m";"";"c78-e";"";"c78-m";"";"c87-e";"";"c87-m";"";]
+	c13e, c13m = callingABCTest(numPairs,true,true,Jl,Jr,1,3)
+	c24e, c24m = callingABCTest(numPairs,true,true,Jl,Jr,2,4)
+	c35e, c35m = callingABCTest(numPairs,true,true,Jl,Jr,3,5)
+	c46e, c46m = callingABCTest(numPairs,true,true,Jl,Jr,4,6)
+	c57e, c57m = callingABCTest(numPairs,true,true,Jl,Jr,5,7)
+	c68e, c68m = callingABCTest(numPairs,true,true,Jl,Jr,6,8)
+	#c78e, c78m = callingABCTest(numPairs,true,true,Jl,Jr,7,8)
+	#c87e, c87m = callingABCTest(numPairs,true,true,Jl,Jr,8,7)
 
-	myScatterPlot(title*"A",save,xTitle,yTitle,labels,
-	[1], [Float64(c12e)],
-	[1], [Float64(c12m)],
-	[1], [Float64(c21e)],
-	[1], [Float64(c21m)],
-	[2], [Float64(c34e)],
-	[2], [Float64(c34m)],
-	[2], [Float64(c43e)],
-	[2], [Float64(c43m)],
-	[3], [Float64(c56e)],
-	[3], [Float64(c56m)],
-	[3], [Float64(c65e)],
-	[3], [Float64(c65m)],
-	[4], [Float64(c78e)],
-	[4], [Float64(c78m)],
-	[4], [Float64(c87e)],
-	[4], [Float64(c87m)]
+	myScatterPlot(title*"B",save,xTitle,yTitle,labels,
+	[1], [Float64(c13e)],
+	[1], [Float64(c13m)],
+	[1], [Float64(c24e)],
+	[1], [Float64(c24m)],
+	[2], [Float64(c35e)],
+	[2], [Float64(c35m)],
+	[2], [Float64(c46e)],
+	[2], [Float64(c46m)],
+	[3], [Float64(c57e)],
+	[3], [Float64(c57m)],
+	[3], [Float64(c68e)],
+	[3], [Float64(c68m)],
+	#[4], [Float64(c78e)],
+	#[4], [Float64(c78m)],
+	#[4], [Float64(c87e)],
+	#[4], [Float64(c87m)]
 	)
 end
 
@@ -204,9 +204,6 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-function terrible(val::Bool)
-	return val
-end
 
 #callingABCTest(1,terrible(false),terrible(false),1,1)
 #callingABCTest(1,false,false,1,1)
