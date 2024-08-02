@@ -2,7 +2,7 @@ using Plots
 
 markershapes = [:circle;:circle;:star5;:star5;:rect;:rect;:h;:h;:star7;:star7;:ltriangle;:ltriangle;:star4;:star4;:utriangle;:utriangle;:dtriangle;:dtriangle]
 
-function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels, data...)
+function myScatterPlot(title::String, save::Bool, labels, data...; axisTitles = "auto", axisLims = "auto", axisTicks = "auto")
 	
 	if (isempty(data)) return end
 	
@@ -25,21 +25,29 @@ function myScatterPlot(title::String, save::Bool, xAxisTitle, yAxisTitle, labels
 	plot(dpi = 600)
 	plot!(legend=:topright)
 	title!(title)
-	xlabel!(xAxisTitle)
-	ylabel!(yAxisTitle)
+	
+	if !(typeof(axisTitles) == String && axisTitles == "auto")
+		plot!(xlabel = axisTitles[1], ylabel = axisTitles[2])
+	end
+	if !(typeof(axisLims) == String && axisLims == "auto")
+		plot!(xlims = axisLims[1], ylims = axisLims[2])
+	end
+	if !(typeof(axisTicks) == String && axisTicks == "auto")
+		plot!(xticks = axisTicks[1], yticks = axisTicks[2])
+	end
 	
 	xmin = 0
 	xmax = 0
+
+	counter = 1
 	
-	for i = 1:2:nSeries
+	for i = 1:2:(nSeries-1)
 		xVals = data[i]
 		yVals = data[i+1]
 		
-		if (nSeries < 6)
-			scatter!(xVals, yVals,ms = 2*nSeries-2*i,label=labels[i])
-		else
-			scatter!(xVals, yVals,ms = 6, shape = markershapes[i%(length(markershapes))] ,label=labels[i], alpha = 0.5)
-		end
+		plot!(xVals, yVals,ms = 6, shape = markershapes[i%(length(markershapes))] ,label=labels[counter], alpha = 0.5)
+
+		counter += 1
 
 		for j = 1:(min(length(xVals),length(yVals)))
 			x = xVals[j]

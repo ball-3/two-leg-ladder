@@ -142,12 +142,12 @@ function MMMfig4cmp()
 	labels = ["J1 < 0";"J1 < 0";"J1 > 0";"J1 > 0"]
 	xVals = [-3;-2;-1;0;1;2;3]
 
-	myScatterPlot(title, savePlot, xTitle, yTitle, labels, xVals, yVals1, xVals, yVals2,[-3;-3],[-16;0])
+	myScatterPlot(title, savePlot, labels, xVals, yVals1, xVals, yVals2, axisTitles = (xTitle, yTitle), axisLims = ([-3;-3],[-16;0]))
 end
 
 function MMMfig4helper(Jl, Jr)
-	result = [0.0 for i in 1:6]# result = ground state energy by absolute value of Jl, y values in fig 4
-	for i in 1:6
+	result = [0.0 for i in 1:7]# result = ground state energy by absolute value of Jl, y values in fig 4
+	for i in 1:7
 		absJ1 = abs(Jl)
 		result[i] = dmrgLadder(6, Jl, Jr)[1]/absJ1	# = E0/|J1|
 		Jr -= 1
@@ -172,10 +172,10 @@ function MMMfig5cmp()
 	savePlot = true
 	xTitle = "J2 / |J1|"
 	yTitle = "correlation"
-	labels = ["c12";"";"c34";"";"c56";"";"c13";"";"c35";"";"c57";"";"c14";"";"c36";"";"c58"]
+	labels = ["c12";"c34";"c56";"c13";"c35";"c57";"c14";"c36";"c58"]
 	xVals = [-4+i for i in 0:8]
 
-	myScatterPlot(title, savePlot, xTitle, yTitle, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, [-4;-4],[-0.25;0.10])
+	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-4;-4],[-0.25;0.10]))
 
 	J1 = -1
 	c12 = MMMfig5helper(J1,J2,1,2)
@@ -194,8 +194,8 @@ function MMMfig5cmp()
 end
 
 function MMMfig5helper(Jl, Jr, site1, site2)
-	result = [0.0 for i in 1:8]# result = 
-	for i in 1:8
+	result = [0.0 for i in 1:9]# result = 
+	for i in 1:9
 		absJ1 = abs(Jl)
 		E0, state, sites = dmrgLadder(6, Jl, Jr)
 		result[i] = CustOp(sites,state,["Sz";"Sz"],[site1,site2],2)	#Sz, Sx, Sy, all interchangeable as long as both are same
@@ -232,5 +232,5 @@ c67 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[6,7],2)
 
 print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
 =#
-
-makeABCPlot(4,1,1)
+MMMfig4cmp()
+MMMfig5cmp()
