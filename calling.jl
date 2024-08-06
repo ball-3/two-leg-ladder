@@ -142,7 +142,7 @@ function MMMfig4cmp()
 	labels = ["J1 < 0";"J1 < 0";"J1 > 0";"J1 > 0"]
 	xVals = [-3;-2;-1;0;1;2;3]
 
-	myScatterPlot(title, savePlot, labels, xVals, yVals1, xVals, yVals2, axisTitles = (xTitle, yTitle), axisLims = ([-3;-3],[-16;0]))
+	myScatterPlot(title, savePlot, labels, xVals, yVals1, xVals, yVals2, axisTitles = (xTitle, yTitle), axisLims = ([-4;4],[-18;2]))
 end
 
 function MMMfig4helper(Jl, Jr)
@@ -175,7 +175,7 @@ function MMMfig5cmp()
 	labels = ["c12";"c34";"c56";"c13";"c35";"c57";"c14";"c36";"c58"]
 	xVals = [-4+i for i in 0:8]
 
-	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-4;-4],[-0.25;0.10]))
+	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-5;5],[-0.30;0.15]))
 
 	J1 = -1
 	c12 = MMMfig5helper(J1,J2,1,2)
@@ -190,7 +190,8 @@ function MMMfig5cmp()
 
 	title = "MMM-fig5-using-MPO-B"
 
-	myScatterPlot(title, savePlot, xTitle, yTitle, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, [-4;-4],[-0.25;0.10])
+	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-5;5],[-0.30;0.15]))
+
 end
 
 function MMMfig5helper(Jl, Jr, site1, site2)
@@ -204,33 +205,6 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-
-#callingABCTest(1,terrible(false),terrible(false),1,1)
-#callingABCTest(1,false,false,1,1)
-
-#=
-groundState = ED(Hamiltonians.ladderOneHalf(4,1,1))[2][1]
-c12 = CustOp(groundState,[σz,σz],[8,1])
-c34 = CustOp(groundState,[σz,σz],[4,3])
-c56 = CustOp(groundState,[σz,σz],[6,5])
-c78 = CustOp(groundState,[σz,σz],[8,7])
-c58 = CustOp(groundState,[σz,σz],[5,8])
-c67 = CustOp(groundState,[σz,σz],[6,7])
-
-print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
-=#
-#=
-groundState = dmrgLadder(4, 1, 1)
-		groundStateWFCT = groundState[2]
-		sites = groundState[3]
-c12 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[1,2],2)
-c34 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[3,4],2)
-c56 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[5,6],2)
-c78 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[7,8],2)
-c58 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[5,5],2)
-c67 = CustOp(sites,groundStateWFCT,["Sz","Sz"],[6,7],2)
-
-print("C12: $(c12)  C34: $(c34)  C56: $(c56)  C78: $(c78)  C58: $(c58)  C67: $(c67)\n")
-=#
 MMMfig4cmp()
 MMMfig5cmp()
+#myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-4;10],[0;10]))

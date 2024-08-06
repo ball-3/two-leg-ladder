@@ -44,7 +44,7 @@ function myScatterPlot(title::String, save::Bool, labels, data...; axisTitles = 
 	for i = 1:2:(nSeries-1)
 		xVals = data[i]
 		yVals = data[i+1]
-		
+
 		plot!(xVals, yVals,ms = 6, shape = markershapes[i%(length(markershapes))] ,label=labels[counter], alpha = 0.5)
 
 		counter += 1
