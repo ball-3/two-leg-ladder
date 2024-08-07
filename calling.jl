@@ -96,33 +96,36 @@ function makeABCPlot(numPairs,Jl,Jr)
 	yTitle = "spin-spin correlation"
 	save = true
 	
-	labels = ["c13-e";"";"c13-m";"";"c24-e";"";"c24-m";"";"c35-e";"";"c35-m";"";"c46-e";"";"c46-m";"";"c57-e";"";"c57-m";"";"c65-e";"";"c65-m";"";"c78-e";"";"c78-m";"";"c87-e";"";"c87-m";"";]
-	c13e, c13m = callingABCTest(numPairs,true,true,Jl,Jr,1,3)
-	c24e, c24m = callingABCTest(numPairs,true,true,Jl,Jr,2,4)
-	c35e, c35m = callingABCTest(numPairs,true,true,Jl,Jr,3,5)
-	c46e, c46m = callingABCTest(numPairs,true,true,Jl,Jr,4,6)
-	c57e, c57m = callingABCTest(numPairs,true,true,Jl,Jr,5,7)
-	c68e, c68m = callingABCTest(numPairs,true,true,Jl,Jr,6,8)
-	#c78e, c78m = callingABCTest(numPairs,true,true,Jl,Jr,7,8)
-	#c87e, c87m = callingABCTest(numPairs,true,true,Jl,Jr,8,7)
+	labels = ["c13-m";"c24-m";"c35-m";"c46-m";"c57-m";"c65-m";"c78-m";"c87-m"]
+	c13e, c13m = callingABCTest(numPairs,false,true,Jl,Jr,1,3)
+	c24e, c24m = callingABCTest(numPairs,false,true,Jl,Jr,2,4)
+	c35e, c35m = callingABCTest(numPairs,false,true,Jl,Jr,3,5)
+	c46e, c46m = callingABCTest(numPairs,false,true,Jl,Jr,4,6)
+	c57e, c57m = callingABCTest(numPairs,false,true,Jl,Jr,5,7)
+	c68e, c68m = callingABCTest(numPairs,false,true,Jl,Jr,6,8)
+	c78e, c78m = callingABCTest(numPairs,false,true,Jl,Jr,7,8)
+	c87e, c87m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
+	c87e, c36_35m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
+	c87e, c35_36m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
 
-	myScatterPlot(title*"B",save,xTitle,yTitle,labels,
-	[1], [Float64(c13e)],
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	#[1], [Float64(c13e)],
 	[1], [Float64(c13m)],
-	[1], [Float64(c24e)],
+	#[1], [Float64(c24e)],
 	[1], [Float64(c24m)],
-	[2], [Float64(c35e)],
+	#[2], [Float64(c35e)],
 	[2], [Float64(c35m)],
-	[2], [Float64(c46e)],
+	#[2], [Float64(c46e)],
 	[2], [Float64(c46m)],
-	[3], [Float64(c57e)],
+	#[3], [Float64(c57e)],
 	[3], [Float64(c57m)],
-	[3], [Float64(c68e)],
+	#[3], [Float64(c68e)],
 	[3], [Float64(c68m)],
 	#[4], [Float64(c78e)],
-	#[4], [Float64(c78m)],
+	[4], [Float64(c78m)],
 	#[4], [Float64(c87e)],
-	#[4], [Float64(c87m)]
+	[4], [Float64(c87m)],
+	axisTitles = (xTitle, yTitle)
 	)
 end
 
@@ -205,6 +208,4 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-MMMfig4cmp()
-MMMfig5cmp()
-#myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-4;10],[0;10]))
+makeABCPlot(21,1,1)

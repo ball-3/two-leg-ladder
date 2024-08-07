@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{xfrac}
+
+\setlength{\textwidth}{15.25cm} \setlength{\evensidemargin}{0cm}
+\setlength{\oddsidemargin}{0cm} \setlength{\textheight}{26cm}
+\setlength{\topmargin}{-1cm}
+
+\title{Two Leg Heisenberg Ladder - Plots}
+\author{Erin Ball}
+\date{August 2024}
+
+\begin{document}
+\begin{center}
+\large
+\textbf{Non-Equilibrium Dynamics of Dimer Ladders - Plots}\\
+Erin Ball
+\end{center}
+\normalsize
+\vspace{0.5cm}
+\newline
+The following plots are made for comparison to figures 4 and 5 in:\newline
+Ground-state magnetic properties of spin ladder-shaped quantum nanomagnet: Exact diagonalization study\newline
+K. Szałowski, P. Kowalewska\newline
+https://doi.org/10.1016/j.jmmm.2017.12.076\newline
+\begin{figure}[h]
+    \caption{P.}
+    \centering
+    \includegraphics[width=0.5\textwidth]{MMM-fig4-using-MPO.png}
+    %generated using "MMMfig4cmp()" in "calling.jl", in Aug 6th push
+    \label{fig4}
+\end{figure}
+\begin{figure}[h]
+    \caption{for positive and negative values of Jl, the leg coupling strength.}
+    \centering
+    \includegraphics[width=0.5\textwidth]{MMM-fig5-using-MPO-A.png}
+    %generated using "MMMfig5cmp()" in "calling.jl", in Aug 6th push
+    \includegraphics[width=0.5\textwidth]{MMM-fig5-using-MPO-B.png}
+    %generated using "MMMfig5cmp()" in "calling.jl", in Aug 6th push
+    \label{fig5}
+\end{figure}
+\newline
+In this project, I will study how triplon excitations propagate through the system when the interaction strength on the rung at the center of the ladder is modulated as a function of time. To perform this investigation, I will develop numerical simulations using the matrix product state algorithm \cite{DMRG}. I will first write a program to identify the ground state of the system as a function of the ratio ${J_r}/{J_l}$. Then, as a second step, I will add to my code the ability to numerically perform the time evolution of the system. Considering the evolved state, I will compute, for example, triplon-triplon correlations and local triplon expectation values to understand how these excitations are generated and propagate through the system as a function of the rung modulation frequency.
+
+\end{document}
