@@ -20,27 +20,31 @@ function callingNormalisationTest()
 	end
 end
 
+function makeEnergyPlot(numPairs,gap,JrMax)
+	numSites = 2*numPairs
+	numDataSets = JrMax/gap
+	title = "ground state energy as a function of coupling strength"
+	xTitle = "Jr/Jl"
+	yTitle = "ground state energy per site"
+	save = true
 
-function callingSpSmTest(n)
-	groundState = ED(Hamiltonians.ladderOneHalf(n,1,1))[2][1]
-	print("\nED expectation ")
-	sum = 0
-	tn = 2*n
-	
-	#for i in 1:(tn-1)
-		#sum += CustOp(groundState,[S⁺*S⁻, S⁻*S⁺],[1,2])
-		sum += CustOp(groundState,[0.5*σz,0.5*σz],[1,2])
-	#end
-	display(sum)
+	Jl = 1
+	Jrs = [gap*i for i in 1:numDataSets]
+	energies = [0.0 for i in 1:numDataSets]
 
-	
-	groundState = dmrgLadder(n, 1, 1)
-	groundStateWFCT = groundState[2]
-	sites = groundState[3]
-	print("\nDMRG expectation ")
-	display(SzSz(sites,groundStateWFCT))
-	#display(CustOp(sites,groundStateWFCT,["S+ * S-","S- * S+"],[1,2]))
-	
+	for i in 1:(numDataSets)
+
+		groundState = dmrgLadder(numPairs, Jl, Jr)
+
+	end
+
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	xVals1, cDown,
+	xVals1, cUp,
+	xVals2, cLeft,
+	xVals2, cRight,
+	axisTitles = (xTitle, yTitle)
+	)
 end
 
 #designed for an odd number of spin pairs
