@@ -23,7 +23,7 @@ function myScatterPlot(title::String, save::Bool, labels, data...; axisTitles = 
 	end
 	
 	plot(dpi = 600)
-	plot!(legend=:topright)
+	#plot!(legend=:topright)
 	title!(title)
 	
 	if !(typeof(axisTitles) == String && axisTitles == "auto")

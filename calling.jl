@@ -43,88 +43,55 @@ function callingSpSmTest(n)
 	
 end
 
-function callingABCTest(nPairs, doED::Bool, doMPS::Bool, Jl, Jr, site1, site2)
-	sigma = 0.5*[σx,σy,σz]
-	sigmaStr = ["Sx","Sy","Sz"]
-	
-	expA, expB, expC = 0, 0, 0
-
-	if(doED)
-		groundState = ED(Hamiltonians.ladderOneHalf(nPairs,Jl,Jr))[2][1]
-
-		for j in 1:3
-			op = [sigma[j],sigma[j]]
-			opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
-
-			expA = CustOp(groundState,op,[site1,site2])
-			#expB = CustOp(groundState,op,[i,i+2])
-			#expC = CustOp(groundState,op,[i+1,i+3])
-
-			exp = expA - 0.5*expB - 0.5*expC
-			#@printf("Using ED for operator %s  : %f = %f - 1/2 %f - 1/2 %f\n", opStr, exp, expA, expB, expC)
-
-		end
-	end
-
-	if(doMPS)
-		groundState = dmrgLadder(nPairs, Jl, Jr)
-		groundStateWFCT = groundState[2]
-		sites = groundState[3]
-
-		for j in 1:3
-			op = [sigmaStr[j],sigmaStr[j]]
-			opStr = "<"*sigmaStr[j]*sigmaStr[j]*">"
-
-			expAMPO = CustOp(sites,groundStateWFCT,op,[site1,site2],2)
-			return [expA, expAMPO]
-
-			if (nPairs > 1)
-				#expB = CustOp(sites,groundStateWFCT,op,[i,i+2],2)
-				#expC = CustOp(sites,groundStateWFCT,op,[i+1,i+3],2)
-			end
-
-			#TODO this is a temp change to fit my plot fct, edit later?
-			return [expA,expB,expC]
-		end
-	end
-end
-
-function makeABCPlot(numPairs,Jl,Jr)
-	numDataSets = 16
+#designed for an odd number of spin pairs
+function makeCorrelationPlot(numPairs,Jl,Jr)
+	numSites = 2*numPairs
 	title = "correlations by site pair"
 	xTitle = "site pair"
 	yTitle = "spin-spin correlation"
 	save = true
+
+	#correlations
+	#	c	i  i+2 i+4 i+6  .....		c	i  i+2 i+4 i+6  .....	c	i   i+2  i+4  i+6  .....	c	i   i+2  i+4  i+6  .....	
+	#	D	*	*	*	*				U	*	*	*	*			R	* -> * -> * -> *			L	*	 *	  *	   *			
+	#	o	|	|	|	|	.....		p	^	^	^	^			i								e
+	#	w	v	v	v	v				 	|	|	|	|	.....	g					   .....	f					   .....	
+	#	n	*	*	*	*					*	*	*	*			ht	*	 *	  *	   *			t	* <- * <- * <- *			
+	cDown = [0.0 for i in 1:numPairs]
+	cUp = [0.0 for i in 1:numPairs]
+	cLeft = [0.0 for i in 1:(numPairs-1)]
+	cRight = [0.0 for i in 1:(numPairs-1)]
+
+	#y\ =\ -\operatorname{abs}\left(\frac{l}{2}-x+\frac{1}{2}\right)+\ \frac{l}{2}+\frac{1}{2}
+	hlen = numPairs/2
+	if iseven(numPairs)
+		hlen += 1/2
+	end
+	xVals1 = [(-abs(hlen - i) + hlen) for i in 1:numPairs]
+	xVals2 = [(-abs(hlen - i) + hlen) for i in 1:(numPairs-1)]
+
+	groundState = dmrgLadder(numPairs, Jl, Jr)
+	groundStateWFCT = groundState[2]
+	sites = groundState[3]
+	op = ["Sz","Sz"]
 	
-	labels = ["c13-m";"c24-m";"c35-m";"c46-m";"c57-m";"c65-m";"c78-m";"c87-m"]
-	c13e, c13m = callingABCTest(numPairs,false,true,Jl,Jr,1,3)
-	c24e, c24m = callingABCTest(numPairs,false,true,Jl,Jr,2,4)
-	c35e, c35m = callingABCTest(numPairs,false,true,Jl,Jr,3,5)
-	c46e, c46m = callingABCTest(numPairs,false,true,Jl,Jr,4,6)
-	c57e, c57m = callingABCTest(numPairs,false,true,Jl,Jr,5,7)
-	c68e, c68m = callingABCTest(numPairs,false,true,Jl,Jr,6,8)
-	c78e, c78m = callingABCTest(numPairs,false,true,Jl,Jr,7,8)
-	c87e, c87m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
-	c87e, c36_35m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
-	c87e, c35_36m = callingABCTest(numPairs,false,true,Jl,Jr,8,7)
+	labels = ["correlation down";"correlation up";"correlation left top";"correlation right bottom"]
+	for i in 1:numPairs
+		cDown[i] = CustOp(sites,groundStateWFCT,op,[i,i+1],2)
+		cUp[i] = CustOp(sites,groundStateWFCT,op,[i+1,i],2)
+	end
+	ctr = 0
+	for i in 1:2:(numSites-3)
+		ctr += 1
+		cRight[ctr] = CustOp(sites,groundStateWFCT,op,[i,i+2],2)
+		cLeft[ctr] = CustOp(sites,groundStateWFCT,op,[i+3,i+1],2)
+	end
 
 	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
-	#[1], [Float64(c13e)],
-	[1], [Float64(c13m)],
-	#[1], [Float64(c24e)],
-	[1], [Float64(c24m)],
-	#[2], [Float64(c35e)],
-	[2], [Float64(c35m)],
-	#[2], [Float64(c46e)],
-	[2], [Float64(c46m)],
-	#[3], [Float64(c57e)],
-	[3], [Float64(c57m)],
-	#[3], [Float64(c68e)],
-	[3], [Float64(c68m)],
-	#[4], [Float64(c78e)],
-	[4], [Float64(c78m)],
-	#[4], [Float64(c87e)],
-	[4], [Float64(c87m)],
+	xVals1, cDown,
+	xVals1, cUp,
+	xVals2, cLeft,
+	xVals2, cRight,
 	axisTitles = (xTitle, yTitle)
 	)
 end
@@ -207,5 +174,3 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	end
 	return result
 end
-
-makeABCPlot(21,1,1)
