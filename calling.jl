@@ -11,38 +11,107 @@ include("./exact-diagonalisation/exact-diagonalisation.jl")
 
 #displayED(Hamiltonians.ladderOneHalf(2,1,1),5)
 
-function callingNormalisationTest()
-	n = 4
-	m = 2^(2*n)
+function makeRungCouplingPlot(numPairs,gap,JrMax)
+	numSites = 2*numPairs
+	numDataSets = Int(JrMax/gap)
+	title = "average rung pair correlation as a function of coupling strength"
+	xTitle = "Jr/Jl"
+	yTitle = "ground state energy per site"
+	labels = [""]
+	save = true
+
+	Jl = 1
+	Jrs = [gap*i for i in 1:numDataSets]
+	exp = [0.0 for i in 1:numDataSets]
 	
-	for i in 1:m
-		display(normalisationTest(ED(Hamiltonians.ladderOneHalf(n,1,1))[2][i]))
+	for i in 1:numDataSets
+		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		for j in 1:2:numPairs
+			exp[i] += CustOp(sites,state,["Sz","Sz"],[j,j+1],2)/numSites
+		end
 	end
+
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	Jrs,exp,
+	axisTitles = (xTitle, yTitle)
+	)
+end
+
+function makeLegCouplingPlot(numPairs,gap,JrMax)
+	numSites = 2*numPairs
+	numDataSets = Int(JrMax/gap)
+	title = "average leg pair correlation as a function of coupling strength"
+	xTitle = "Jr/Jl"
+	yTitle = "ground state energy per site"
+	labels = [""]
+	save = true
+
+	Jl = 1
+	Jrs = [gap*i for i in 1:numDataSets]
+	exp = [0.0 for i in 1:numDataSets]
+	
+	for i in 1:numDataSets
+		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		for j in 1:numPairs
+			exp[i] += CustOp(sites,state,["Sz","Sz"],[j,j+2],2)/numSites
+		end
+	end
+
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	Jrs,exp,
+	axisTitles = (xTitle, yTitle)
+	)
+end
+makeLegCouplingPlot(21,1,100)
+
+function makeMagnetismPlot(numPairs,gap,JrMax)
+	numSites = 2*numPairs
+	numDataSets = Int(JrMax/gap)
+	title = "total magnetism as a function of coupling strength"
+	xTitle = "Jr/Jl"
+	yTitle = "ground state energy per site"
+	labels = [""]
+	save = true
+
+	Jl = 1
+	Jrs = [gap*i for i in 1:numDataSets]
+	exp = [0.0 for i in 1:numDataSets]
+	
+	for i in 1:numDataSets
+		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		for j in 1:numPairs
+			exp[i] += CustOp(sites,state,["Sz"],[j],1)
+			#exp += SzOn(state,groundStateWFCT,)
+		end
+	end
+
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	Jrs,exp,
+	axisTitles = (xTitle, yTitle)
+	)
 end
 
 function makeEnergyPlot(numPairs,gap,JrMax)
 	numSites = 2*numPairs
-	numDataSets = JrMax/gap
+	numDataSets = Int(JrMax/gap)
 	title = "ground state energy as a function of coupling strength"
 	xTitle = "Jr/Jl"
 	yTitle = "ground state energy per site"
+	labels = [""]
 	save = true
 
 	Jl = 1
 	Jrs = [gap*i for i in 1:numDataSets]
 	energies = [0.0 for i in 1:numDataSets]
 
-	for i in 1:(numDataSets)
+	for i in 1:numDataSets
 
-		groundState = dmrgLadder(numPairs, Jl, Jr)
+		energies[i] = dmrgLadder(numPairs, Jl, Jrs[i])[1]/(Jrs[i]*numPairs)
 
 	end
 
 	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
-	xVals1, cDown,
-	xVals1, cUp,
-	xVals2, cLeft,
-	xVals2, cRight,
+	Jrs,energies,
 	axisTitles = (xTitle, yTitle)
 	)
 end
@@ -178,3 +247,5 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	end
 	return result
 end
+
+#makeEnergyPlot(21,1,100)

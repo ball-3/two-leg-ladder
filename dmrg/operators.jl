@@ -18,11 +18,16 @@ function CustOp(sites, state, operators, sitesApplied, prodNum)
 		end
 	end
 	=#
-	for j in 1:Integer(numSitesApplied/2)
-		os += operators[j], sitesApplied[j]
-		os *= operators[j+1], sitesApplied[j+1]
+	if prodNum == 2
+		for j in 1:Integer(numSitesApplied/2)
+			os += operators[j], sitesApplied[j]
+			os *= operators[j+1], sitesApplied[j+1]
+		end
+	else#TODO this assumes prodnum == 1 'B)
+		for j in 1:Integer(numSitesApplied)
+			os += operators[j], sitesApplied[j]
+		end
 	end
-
 	op = MPO(os, sites)
 	
 	expVal = inner(state',op,state)
