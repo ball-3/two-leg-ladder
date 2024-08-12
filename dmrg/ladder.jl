@@ -58,15 +58,12 @@ function timeEvolutionChain(numSites, Jl, Jr)
     s3 = s[j + 2]
     s4 = s[j + 3]
     hj =
-      Jr / 2 * (op("S-", s1) * op("S+", s2) + op("S+", s1) * op("S-", s2) + 
-                op("S-", s3) * op("S+", s4) + op("S+", s3) * op("S-", s4) +
-                op("Sz", s1) * op("Sz", s2) + op("Sz", s3) * op("Sz", s4))+
-      Jl / 2 * (op("S-", s1) * op("S+", s3) + op("S+", s1) * op("S-", s3) + 
-                op("S-", s2) * op("S+", s4) + op("S+", s2) * op("S-", s4) +
-                op("Sz", s1) * op("Sz", s3) + op("Sz", s2) * op("Sz", s4))
-      #op("Sz", s1) * op("Sz", s2) +
-      #1 / 2 * op("S+", s1) * op("S-", s2) +
-      #1 / 2 * op("S-", s1) * op("S+", s2)
+      Jr / 2 * (op("S-", s1) * op("S+", s2) * op("I", s3) * op("I", s4) + op("S+", s1) * op("S-", s2) * op("I", s3) * op("I", s4) + 
+                op("I", s1) * op("I", s2) * op("S-", s3) * op("S+", s4) + op("I", s1) * op("I", s2) * op("S+", s3) * op("S-", s4) +
+                op("Sz", s1) * op("Sz", s2) * op("I", s3) * op("I", s4) + op("I", s1) * op("I", s2) * op("Sz", s3) * op("Sz", s4))+
+      Jl / 2 * (op("S-", s1) * op("I", s2) * op("S+", s3) * op("I", s4) + op("S+", s1) * op("I", s2) * op("S-", s3) * op("I", s4) + 
+                op("I", s1) * op("S-", s2) * op("I", s3) * op("S+", s4) + op("I", s1) * op("S+", s2) * op("I", s3) * op("S-", s4) +
+                op("Sz", s1) * op("I", s2) * op("Sz", s3) * op("I", s4) + op("I", s1) * op("Sz", s2) * op("I", s3) * op("Sz", s4))
     Gj = exp(-im * tau / 2 * hj)
     push!(gates, Gj)
   end
@@ -93,5 +90,3 @@ function timeEvolutionChain(numSites, Jl, Jr)
 
   return
 end
-
-timeEvolutionChain(10,1,1)

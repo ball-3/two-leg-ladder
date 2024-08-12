@@ -16,7 +16,7 @@ function makeRungCouplingPlot(numPairs,gap,JrMax)
 	numDataSets = Int(JrMax/gap)
 	title = "average rung pair correlation as a function of coupling strength"
 	xTitle = "Jr/Jl"
-	yTitle = "ground state energy per site"
+	yTitle = "rung correlation"
 	labels = [""]
 	save = true
 
@@ -42,7 +42,7 @@ function makeLegCouplingPlot(numPairs,gap,JrMax)
 	numDataSets = Int(JrMax/gap)
 	title = "average leg pair correlation as a function of coupling strength"
 	xTitle = "Jr/Jl"
-	yTitle = "ground state energy per site"
+	yTitle = "leg correlation"
 	labels = [""]
 	save = true
 
@@ -248,4 +248,5 @@ function MMMfig5helper(Jl, Jr, site1, site2)
 	return result
 end
 
-#makeEnergyPlot(21,1,100)
+makeRungCouplingPlot(51,1,10)
+makeLegCouplingPlot(51,1,10)
