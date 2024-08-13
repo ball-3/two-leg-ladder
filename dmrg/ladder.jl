@@ -90,3 +90,5 @@ function timeEvolutionChain(numSites, Jl, Jr)
 
   return
 end
+
+timeEvolutionChain(6, 1, 1)

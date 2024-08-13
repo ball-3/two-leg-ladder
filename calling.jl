@@ -169,84 +169,29 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 	)
 end
 
-#function to plot figure 4 from ground state magnetic properties of spin ladder shaped quantum nanomagnet: exact diagonalisation study
-#using my mpo methods to test accuracy
-function MMMfig4cmp()
-	J1 = 1
-	J2 = 3
-	yVals1 = MMMfig4helper(J1,J2)
-	J1 = -1
-	yVals2 = MMMfig4helper(J1,J2)
+#TODO brah i need to take an expecation value too otherwise it just sits here ayo
+function makeTimeTermsPlot(numPairs, Jl, Jr, maxTerms, t)
+	numSites = 2*numPairs
+	title = "final value as a function of included terms from power series expansion"
+	xTitle = "num terms"
+	yTitle = "C(t)"
+	labels = [""]
+	save = true
 
-	title = "MMM-fig4-using-MPO"
-	savePlot = true
-	xTitle = "J2 / |J1|"
-	yTitle = "E0 / |J1|"
-	labels = ["J1 < 0";"J1 < 0";"J1 > 0";"J1 > 0"]
-	xVals = [-3;-2;-1;0;1;2;3]
+	H = Hamiltonians.ladderOneHalf(numPairs, Jl, Jr)
+	psi0 = ED(H)[2][1]
 
-	myScatterPlot(title, savePlot, labels, xVals, yVals1, xVals, yVals2, axisTitles = (xTitle, yTitle), axisLims = ([-4;4],[-18;2]))
-end
-
-function MMMfig4helper(Jl, Jr)
-	result = [0.0 for i in 1:7]# result = ground state energy by absolute value of Jl, y values in fig 4
-	for i in 1:7
-		absJ1 = abs(Jl)
-		result[i] = dmrgLadder(6, Jl, Jr)[1]/absJ1	# = E0/|J1|
-		Jr -= 1
+	results = [0.0 for i in 1:maxTerms]
+	nTerms = [i for i in 1:maxTerms]
+	
+	for i in 1:maxTerms
+		psi = timeEvolution(t, H, i) * psi0
+		results[i] = SzOn(psi,numPairs)
 	end
-	return result
+
+	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
+	nTerms, results,
+	axisTitles = (xTitle, yTitle))
 end
 
-function MMMfig5cmp()
-	J1 = 1
-	J2 = 4
-	c12 = MMMfig5helper(J1,J2,1,2)
-	c34 = MMMfig5helper(J1,J2,3,4)
-	c56 = MMMfig5helper(J1,J2,5,6)
-	c13 = MMMfig5helper(J1,J2,1,3)
-	c35 = MMMfig5helper(J1,J2,3,5)
-	c57 = MMMfig5helper(J1,J2,5,7)
-	c14 = MMMfig5helper(J1,J2,1,4)
-	c36 = MMMfig5helper(J1,J2,3,6)
-	c58 = MMMfig5helper(J1,J2,5,8)
-
-	title = "MMM-fig5-using-MPO-A"
-	savePlot = true
-	xTitle = "J2 / |J1|"
-	yTitle = "correlation"
-	labels = ["c12";"c34";"c56";"c13";"c35";"c57";"c14";"c36";"c58"]
-	xVals = [-4+i for i in 0:8]
-
-	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-5;5],[-0.30;0.15]))
-
-	J1 = -1
-	c12 = MMMfig5helper(J1,J2,1,2)
-	c34 = MMMfig5helper(J1,J2,3,4)
-	c56 = MMMfig5helper(J1,J2,5,6)
-	c13 = MMMfig5helper(J1,J2,1,3)
-	c35 = MMMfig5helper(J1,J2,3,5)
-	c57 = MMMfig5helper(J1,J2,5,7)
-	c14 = MMMfig5helper(J1,J2,1,4)
-	c36 = MMMfig5helper(J1,J2,3,6)
-	c58 = MMMfig5helper(J1,J2,5,8)
-
-	title = "MMM-fig5-using-MPO-B"
-
-	myScatterPlot(title, savePlot, labels, xVals, c12, xVals, c34, xVals, c56, xVals, c13, xVals, c35, xVals, c57, xVals, c14, xVals, c36, xVals, c58, axisTitles = (xTitle, yTitle), axisLims = ([-5;5],[-0.30;0.15]))
-
-end
-
-function MMMfig5helper(Jl, Jr, site1, site2)
-	result = [0.0 for i in 1:9]# result = 
-	for i in 1:9
-		absJ1 = abs(Jl)
-		E0, state, sites = dmrgLadder(6, Jl, Jr)
-		result[i] = CustOp(sites,state,["Sz";"Sz"],[site1,site2],2)	#Sz, Sx, Sy, all interchangeable as long as both are same
-		Jr -= 1
-	end
-	return result
-end
-
-makeRungCouplingPlot(51,1,10)
-makeLegCouplingPlot(51,1,10)
+makeTimeTermsPlot(3,1,1,10,5)

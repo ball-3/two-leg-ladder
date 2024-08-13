@@ -103,3 +103,15 @@ function buildOperator(operators, sitesApplied, dim)
 		# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	end
 end
+
+#currently for only ground state
+function timeEvolution(t, H, maxTerms)
+	E = gsE(H)
+	sum = 1
+	term = -im*t*E
+
+	for i in 2:maxTerms
+		sum += (term)^i
+	end
+	return sum
+end
