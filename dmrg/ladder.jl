@@ -2,6 +2,8 @@ using ITensors, ITensorMPS
 using Printf
 using Random
 
+include("operators.jl")
+
 Random.seed!(6969)
 
 function dmrgLadder(numPairs, Jl, Jr)
@@ -75,12 +77,15 @@ function timeEvolutionChain(numSites, Jl, Jr)
   psi = MPS(s, n -> isodd(n) ? "Up" : "Dn")
 
   c = div(N, 2) # center site
+  display(c)
 
   # Compute and print <Sz> at each time step
   # then apply the gates to go to the next time
   for t in 0.0:tau:ttotal
-    Sz = expect(psi, "Sz"; sites=c)
-    println("$t $Sz")
+    #Sz = expect(psi, "Sz"; sites=c)
+    #Sz1 = expect(psi, "Sz", sites=1:2)
+    #Sz2 = CustOp(s, psi, ["Sz","Sz"], [c,c+1], 2)
+    #println("$t $Sz2")
 
     t≈ttotal && break
 
@@ -90,5 +95,3 @@ function timeEvolutionChain(numSites, Jl, Jr)
 
   return
 end
-
-timeEvolutionChain(6, 1, 1)

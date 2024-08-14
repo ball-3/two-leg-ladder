@@ -185,10 +185,12 @@ function makeTimeTermsPlot(numPairs, Jl, Jr, maxTerms, t)
 	nTerms = [i for i in 1:maxTerms]
 	
 	for i in 1:maxTerms
-		psi = timeEvolution(t, H, i) * psi0
-		results[i] = SzOn(psi,numPairs)
+		psi = timeEvolution(t,0.1, H, i) * psi0
+		results[i] = CustOp(psi,[σz,σz],[numPairs, numPairs+1])
+		display(results[i])
 	end
 
+	display(results)
 	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
 	nTerms, results,
 	axisTitles = (xTitle, yTitle))
