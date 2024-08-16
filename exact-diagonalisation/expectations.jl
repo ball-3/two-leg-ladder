@@ -105,7 +105,8 @@ function buildOperator(operators, sitesApplied, dim)
 end
 
 #currently for only ground state
-function timeEvolution(tMax, tGap, H)
+#TODO adjust E value at each 'step'
+function timeEvolution(tMax, H)
 	diag = ED(H)
 	E = diag[1][1]
 	state0 = diag[2][1]
@@ -113,17 +114,14 @@ function timeEvolution(tMax, tGap, H)
 	state = [0.0 + 0.0*im for i in 1:dim]
 	state += state0
 
-	for t in 0:tGap:tMax
-		x = -t*E
-		state *= (cos(x) + im*sin(x))
-		state = normalize(state)
-		#normalise the state here and now
-	end
+	x = -tMax*E
+	state *= (cos(x) + im*sin(x))
+	state = normalize(state)
 	
 	return state
 end
 
 H0 = [1 0 0 0; 0 -1 1 0; 0 1 -1 0; 0 0 0 1]
-c = timeEvolution(5,0.1, H0)
+c = timeEvolution(5, H0)
 display(c)
-display(normalisationTest(c))
+display(gsE())

@@ -43,11 +43,42 @@ function dmrgLadder(numPairs, Jl, Jr)
 	return [energy, psi, sites]
 end
 
-function timeEvolutionChain(numSites, Jl, Jr)
+function dmrgLadder(psi0, sites, Jl, Jr)
+
+	N = length(sites)
+	
+	os = OpSum()
+	for j in 1:(N-2)
+		#inter dimer
+		os += Jl, "Sz", j, "Sz", j+2
+		os += Jl*0.5, "S+", j, "S-", j+2
+		os += Jl*0.5, "S-", j, "S+", j+2
+	end
+	
+	for j in 1:2:(N-1)	
+		#intra dimer
+		os += Jr, "Sz", j, "Sz", j+1
+		os += Jr*0.5, "S+", j, "S-", j+1
+		os += Jr*0.5, "S-", j, "S+", j+1
+	end
+	
+	op = MPO(os, sites)
+	
+	nsweeps = 20#changed from 10
+	maxdim = [200]#increased
+	
+	cutoff = [1e-12]#changed from 1e-6
+	
+	energy, psi = dmrg(op, psi0; nsweeps, maxdim, cutoff, outputlevel = 0)
+	
+	#@printf("Final energy = %.12f, n = %d, Jl = %f, Jr = %f\n", energy, N, Jl, Jr)
+	
+	return [energy, psi, sites]
+end
+
+function timeEvolutionChain(numSites, Jl, Jr, ttotal, tau)
   N = numSites
   cutoff = 1E-8
-  tau = 0.1
-  ttotal = 5.0
 
   # Make an array of 'site' indices
   s = siteinds("S=1/2", N; conserve_qns=true)
@@ -77,7 +108,6 @@ function timeEvolutionChain(numSites, Jl, Jr)
   psi = MPS(s, n -> isodd(n) ? "Up" : "Dn")
 
   c = div(N, 2) # center site
-  display(c)
 
   # Compute and print <Sz> at each time step
   # then apply the gates to go to the next time
@@ -93,5 +123,8 @@ function timeEvolutionChain(numSites, Jl, Jr)
     normalize!(psi)
   end
 
-  return
+  return [psi, s]
 end
+
+psi, sites = timeEvolutionChain(6,1,1,5,0.1)
+display(dmrgLadder(psi,sites,1,1)[1])
