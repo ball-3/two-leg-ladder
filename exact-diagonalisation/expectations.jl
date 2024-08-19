@@ -120,8 +120,3 @@ function timeEvolution(tMax, H)
 	
 	return state
 end
-
-H0 = [1 0 0 0; 0 -1 1 0; 0 1 -1 0; 0 0 0 1]
-c = timeEvolution(5, H0)
-display(c)
-display(gsE())

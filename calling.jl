@@ -170,30 +170,32 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 end
 
 #TODO brah i need to take an expecation value too otherwise it just sits here ayo
-function makeTimeTermsPlot(numPairs, Jl, Jr, maxTerms, t)
+function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 	numSites = 2*numPairs
-	title = "final value as a function of included terms from power series expansion"
+	title = "ED enery and DMRG energy evolved over time"
 	xTitle = "num terms"
 	yTitle = "C(t)"
 	labels = [""]
 	save = true
 
-	H = Hamiltonians.ladderOneHalf(numPairs, Jl, Jr)
-	psi0 = ED(H)[2][1]
+	H0 = Hamiltonians.ladderOneHalf(numPairs, Jl, Jr)
 
-	results = [0.0 for i in 1:maxTerms]
-	nTerms = [i for i in 1:maxTerms]
+	EDresults = [0.0 for i in 1:t]
+	DMRGresults = [0.0 for i in 1:t]
+	nTerms = [i for i in 1:t]
 	
-	for i in 1:maxTerms
-		psi = timeEvolution(t,0.1, H, i) * psi0
-		results[i] = CustOp(psi,[σz,σz],[numPairs, numPairs+1])
-		display(results[i])
+	for i in 1:t
+		psi = timeEvolution(t, H0)
+		#results[i] = CustOp(psi,[σz,σz],[numPairs, numPairs+1])
+		EDresults[i] = gsE(H0,psi)
+		psi, sites = timeEvolutionChain(2*numPairs,1,1,t,0.1)
+		DMRGresults[i] = dmrgLadder(psi,sites,1,1)[1]
 	end
 
-	display(results)
 	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
-	nTerms, results,
+	nTerms, EDresults,
+	nTerms, DMRGresults,
 	axisTitles = (xTitle, yTitle))
 end
 
-makeTimeTermsPlot(3,1,1,10,5)
+makeTimeEDEPlot(3,1,1,15)

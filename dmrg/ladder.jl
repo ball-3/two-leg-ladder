@@ -125,6 +125,3 @@ function timeEvolutionChain(numSites, Jl, Jr, ttotal, tau)
 
   return [psi, s]
 end
-
-psi, sites = timeEvolutionChain(6,1,1,5,0.1)
-display(dmrgLadder(psi,sites,1,1)[1])
