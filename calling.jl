@@ -175,7 +175,7 @@ function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 	title = "ED enery and DMRG energy evolved over time"
 	xTitle = "num terms"
 	yTitle = "C(t)"
-	labels = [""]
+	labels = []
 	save = true
 
 	H0 = Hamiltonians.ladderOneHalf(numPairs, Jl, Jr)
@@ -193,9 +193,9 @@ function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 	end
 
 	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
-	nTerms, EDresults,
 	nTerms, DMRGresults,
+	nTerms, EDresults,
 	axisTitles = (xTitle, yTitle))
 end
 
-makeTimeEDEPlot(3,1,1,15)
+makeTimeEDEPlot(2,1,1,25)
