@@ -1,10 +1,8 @@
-using ITensors, ITensorMPS
-using Printf
-using Random
+using ITensors, ITensorMPS, Random, Printf
 
 Random.seed!(9999)
 
-function main2(N,jl)
+function chain(N,jl)
 
 	sites = siteinds("S=1/2", N)
 	

@@ -1,6 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{graphicx}
-\usepackage{xfrac}
+\usepackage{graphicx, xfrac, adjustbox}
 
 \setlength{\textwidth}{15.25cm} \setlength{\evensidemargin}{0cm}
 \setlength{\oddsidemargin}{0cm} \setlength{\textheight}{26cm}
@@ -18,28 +17,87 @@ Erin Ball
 \end{center}
 \normalsize
 \vspace{0.5cm}
-\newline
+    \begin{figure}[htbp]
+    \centering
+    \adjustbox{valign=t}{\begin{minipage}{0.6\textwidth}
+        \includegraphics[width=\textwidth]{example-image-a.pdf}
+    \end{minipage}}
+    \hfill  
+\adjustbox{valign=t}{\begin{minipage}{0.35\textwidth}% changed <<<<
+        \includegraphics[width=\textwidth]{example-image-a.pdf}
+        \vfill
+    \end{minipage}} 
+    \begin{minipage}[t]{0.6\textwidth}
+        \caption{Caption 1.}
+        \label{fig1}
+    \end{minipage}%%%
+    \hfill
+    \begin{minipage}[t]{0.35\textwidth}
+        \caption{Caption 2.}
+        \label{fig2}
+    \end{minipage}
+\end{figure}  
+\begin{figure}[h]
+    \caption{comparison of using exact diagonalisation and mps methods for 6 spins}
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{correlations by site pairA.png}
+        \vfill
+    %generated using "makeABCPlot(3,1,1)" in "calling.jl", in ??? ?th push
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.05\textwidth} 
+       \hfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth} 
+        \includegraphics[width=\textwidth]{correlations by site pairB.png}
+        %generated using "makeABCPlot(3,1,1)" in "calling.jl", in ??? ?th push
+       \vfill
+    \end{minipage}}
+    
+    \label{symmetriesEDvsMPS}
+\end{figure}
+\begin{figure}[h]
+    \caption{checking symmetries using mps method for various number of spin pairs}
+    \centering
+    \includegraphics[width=0.45\textwidth]{correlations by site pair11pairs.png}
+    %generated using "makeCorrelationPlot(11,1,1)" in "calling.jl", in aug 7th push
+    \adjustbox{valign=t}{\begin{minipage}{0.05\textwidth} 
+       \hfill
+    \end{minipage}}
+    \includegraphics[width=0.45\textwidth]{correlations by site pair21pairs.png}
+    %generated using "makeCorrelationPlot(21,1,1)" in "calling.jl", in aug 7th push
+    \includegraphics[width=0.45\textwidth]{correlations by site pair51pairs.png}
+    %generated using "makeCorrelationPlot(51,1,1)" in "calling.jl", in aug 7th push
+    \label{symmetries}
+\end{figure}
+Note that the left and right half of the ladder are overlayed to show the symmetry - x value of 1 corresponds to the 1st and last pair, 2 corresponds to the second and second to last pair. see makecorrelationplot function for further detail.\newline
 The following plots are made for comparison to figures 4 and 5 in:\newline
 Ground-state magnetic properties of spin ladder-shaped quantum nanomagnet: Exact diagonalization study\newline
 K. Szałowski, P. Kowalewska\newline
 https://doi.org/10.1016/j.jmmm.2017.12.076\newline
-\begin{figure}[h]
-    \caption{P.}
+
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{MMM-fig4-using-MPO.png}
-    %generated using "MMMfig4cmp()" in "calling.jl", in Aug 6th push
-    \label{fig4}
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{MMM-fig4-using-MPO.png}
+        %generated using "MMMfig4cmp()" in "calling.jl", in Aug 6th push
+        \vfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.02\textwidth} 
+       \hfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.5\textwidth}
+        \includegraphics[width=\textwidth, height=6.2cm]{Screenshot from 2024-08-07 14-31-37.png}
+        \vfill
+    \end{minipage}} 
+    \begin{minipage}[t]{0.5\textwidth}
+        \caption{Caption 1.}
+        \label{fig1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.5\textwidth}
+        \caption{Caption 2.}
+        \label{fig2}
+    \end{minipage}
 \end{figure}
-\begin{figure}[h]
-    \caption{for positive and negative values of Jl, the leg coupling strength.}
-    \centering
-    \includegraphics[width=0.5\textwidth]{MMM-fig5-using-MPO-A.png}
-    %generated using "MMMfig5cmp()" in "calling.jl", in Aug 6th push
-    \includegraphics[width=0.5\textwidth]{MMM-fig5-using-MPO-B.png}
-    %generated using "MMMfig5cmp()" in "calling.jl", in Aug 6th push
-    \label{fig5}
-\end{figure}
-\newline
-In this project, I will study how triplon excitations propagate through the system when the interaction strength on the rung at the center of the ladder is modulated as a function of time. To perform this investigation, I will develop numerical simulations using the matrix product state algorithm \cite{DMRG}. I will first write a program to identify the ground state of the system as a function of the ratio ${J_r}/{J_l}$. Then, as a second step, I will add to my code the ability to numerically perform the time evolution of the system. Considering the evolved state, I will compute, for example, triplon-triplon correlations and local triplon expectation values to understand how these excitations are generated and propagate through the system as a function of the rung modulation frequency.
 
 \end{document}

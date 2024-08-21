@@ -23,8 +23,6 @@ function myScatterPlot(title::String, save::Bool, labels, data...; axisTitles = 
 	end
 	
 	plot(dpi = 600)
-	#TODO thise is temporary !!!!!!!!!!
-	plot!(size=(6000,6000))
 	#plot!(legend=:topright)
 	title!(title)
 	

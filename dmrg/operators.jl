@@ -35,6 +35,7 @@ function CustOp(sites, state, operators, sitesApplied, prodNum)
 	return expVal
 end
 
+#finds the expectation value of S^2 operator given a state
 function S2(sites, state)	
 	numSites = length(sites)
 	
@@ -55,6 +56,7 @@ function S2(sites, state)
 	return expVal
 end
 
+#finds the expectation value of S_z operator given a state
 function Sz(sites, state)	
 	numSites = length(sites)
 	
@@ -70,6 +72,7 @@ function Sz(sites, state)
 	return expVal/length(sites)
 end
 
+#finds the expectation value of S_x operator given a state
 function Sx(sites, state)	
 	numSites = length(sites)
 	
@@ -85,6 +88,7 @@ function Sx(sites, state)
 	return expVal/length(sites)
 end
 
+#finds the expectation value of S_y operator given a state
 function Sy(sites, state)	
 	numSites = length(sites)
 	
@@ -100,6 +104,7 @@ function Sy(sites, state)
 	return expVal/length(sites)
 end
 
+#finds the expectation value of S^+ operator given a state
 function Splus(sites, state)	
 	numSites = length(sites)
 	
@@ -115,6 +120,7 @@ function Splus(sites, state)
 	return expVal/length(sites)
 end
 
+#finds the expectation value of S^- operator given a state
 function Sminus(sites, state)	
 	numSites = length(sites)
 	

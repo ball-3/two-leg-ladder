@@ -1,12 +1,10 @@
-using ITensors, ITensorMPS
-using Printf
-using Random
+using ITensors, ITensorMPS, Random, Printf
 
 include("operators.jl")
 
 Random.seed!(6969)
 
-function dmrgLadder(numPairs, Jl, Jr)
+function ladder(numPairs, Jl, Jr)
 
 	N = numPairs*2#TODO added this july 2, why whasnt it here?
 	
@@ -43,7 +41,7 @@ function dmrgLadder(numPairs, Jl, Jr)
 	return [energy, psi, sites]
 end
 
-function dmrgLadder(psi0, sites, Jl, Jr)
+function ladder(psi0, sites, Jl, Jr)
 
 	N = length(sites)
 	
@@ -76,7 +74,7 @@ function dmrgLadder(psi0, sites, Jl, Jr)
 	return [energy, psi, sites]
 end
 
-function timeEvolutionChain(numSites, Jl, Jr, ttotal, tau)
+function timeEvoLadder(numSites, Jl, Jr, ttotal, tau)
   N = numSites
   cutoff = 1E-8
 

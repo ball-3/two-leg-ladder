@@ -25,7 +25,7 @@ function makeRungCouplingPlot(numPairs,gap,JrMax)
 	exp = [0.0 for i in 1:numDataSets]
 	
 	for i in 1:numDataSets
-		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		energy, state, sites = ladder(numPairs, Jl, Jrs[i])
 		for j in 1:2:numPairs
 			exp[i] += CustOp(sites,state,["Sz","Sz"],[j,j+1],2)/numSites
 		end
@@ -51,7 +51,7 @@ function makeLegCouplingPlot(numPairs,gap,JrMax)
 	exp = [0.0 for i in 1:numDataSets]
 	
 	for i in 1:numDataSets
-		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		energy, state, sites = ladder(numPairs, Jl, Jrs[i])
 		for j in 1:numPairs
 			exp[i] += CustOp(sites,state,["Sz","Sz"],[j,j+2],2)/numSites
 		end
@@ -78,7 +78,7 @@ function makeMagnetismPlot(numPairs,gap,JrMax)
 	exp = [0.0 for i in 1:numDataSets]
 	
 	for i in 1:numDataSets
-		energy, state, sites = dmrgLadder(numPairs, Jl, Jrs[i])
+		energy, state, sites = ladder(numPairs, Jl, Jrs[i])
 		for j in 1:numPairs
 			exp[i] += CustOp(sites,state,["Sz"],[j],1)
 			#exp += SzOn(state,groundStateWFCT,)
@@ -106,7 +106,7 @@ function makeEnergyPlot(numPairs,gap,JrMax)
 
 	for i in 1:numDataSets
 
-		energies[i] = dmrgLadder(numPairs, Jl, Jrs[i])[1]/(Jrs[i]*numPairs)
+		energies[i] = ladder(numPairs, Jl, Jrs[i])[1]/(Jrs[i]*numPairs)
 
 	end
 
@@ -143,7 +143,7 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 	xVals1 = [(-abs(hlen - i) + hlen) for i in 1:numPairs]
 	xVals2 = [(-abs(hlen - i) + hlen) for i in 1:(numPairs-1)]
 
-	groundState = dmrgLadder(numPairs, Jl, Jr)
+	groundState = ladder(numPairs, Jl, Jr)
 	groundStateWFCT = groundState[2]
 	sites = groundState[3]
 	op = ["Sz","Sz"]
@@ -172,9 +172,9 @@ end
 #TODO brah i need to take an expecation value too otherwise it just sits here ayo
 function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 	numSites = 2*numPairs
-	title = "ED enery and DMRG energy evolved over time"
+	title = "Difference in ED vs DMRG energy across time evolution"
 	xTitle = "num terms"
-	yTitle = "C(t)"
+	yTitle = "Percent Difference"
 	labels = []
 	save = true
 
@@ -187,15 +187,21 @@ function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 	for i in 1:t
 		psi = timeEvolution(t, H0)
 		#results[i] = CustOp(psi,[σz,σz],[numPairs, numPairs+1])
-		EDresults[i] = gsE(H0,psi)
-		psi, sites = timeEvolutionChain(2*numPairs,1,1,t,0.1)
-		DMRGresults[i] = dmrgLadder(psi,sites,1,1)[1]
+		EDresults[i] = energy(H0,psi)
+		psi, sites = timeEvoLadder(2*numPairs,1,1,t,0.1)
+		DMRGresults[i] = ladder(psi,sites,1,1)[1]
 	end
 
-	myScatterPlot(title*"$numPairs"*"pairs",save,labels,
-	nTerms, DMRGresults,
-	nTerms, EDresults,
+	pDiffs = [pdiff(DMRGresults[i],EDresults[i]) for i in 1:t]
+
+	myScatterPlot(title*" $numPairs"*" pairs",save,labels,
+	#nTerms, DMRGresults,
+	#nTerms, EDresults,
+	nTerms, pDiffs,
 	axisTitles = (xTitle, yTitle))
 end
 
-makeTimeEDEPlot(2,1,1,25)
+for i in 1:4
+makeTimeEDEPlot(i,1,1,15)
+end
+#makeCorrelationPlot(2,1,10)
