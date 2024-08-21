@@ -170,7 +170,7 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 end
 
 #TODO brah i need to take an expecation value too otherwise it just sits here ayo
-function makeTimeEDEPlot(numPairs, Jl, Jr, t)
+function makeTimeEDvDMRGEPlot(numPairs, Jl, Jr, t)
 	numSites = 2*numPairs
 	title = "Difference in ED vs DMRG energy across time evolution"
 	xTitle = "num terms"
@@ -202,6 +202,6 @@ function makeTimeEDEPlot(numPairs, Jl, Jr, t)
 end
 
 for i in 1:4
-makeTimeEDEPlot(i,1,1,15)
+makeTimeEDvDMRGEPlot(i,1,1,15)
 end
 #makeCorrelationPlot(2,1,10)
