@@ -170,38 +170,30 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 end
 
 #TODO brah i need to take an expecation value too otherwise it just sits here ayo
-function makeTimeEDvDMRGEPlot(numPairs, Jl, Jr, t)
+function makeTimeDMRGEPlot(numPairs, Jl, Jr, t)
 	numSites = 2*numPairs
-	title = "Difference in ED vs DMRG energy across time evolution"
-	xTitle = "num terms"
+	title = "difference in energy of state as time evolves vs initial energy"
+	xTitle = "time evolved to"
 	yTitle = "Percent Difference"
 	labels = []
 	save = true
 
-	H0 = Hamiltonians.ladderOneHalf(numPairs, Jl, Jr)
-
-	EDresults = [0.0 for i in 1:t]
 	DMRGresults = [0.0 for i in 1:t]
 	nTerms = [i for i in 1:t]
 	
 	for i in 1:t
-		psi = timeEvolution(t, H0)
-		#results[i] = CustOp(psi,[σz,σz],[numPairs, numPairs+1])
-		EDresults[i] = energy(H0,psi)
 		psi, sites = timeEvoLadder(2*numPairs,1,1,t,0.1)
 		DMRGresults[i] = ladder(psi,sites,1,1)[1]
 	end
 
-	pDiffs = [pdiff(DMRGresults[i],EDresults[i]) for i in 1:t]
+	pDiffs = [pdiff(DMRGresults[i],DMRGresults[1]) for i in 1:t]
 
 	myScatterPlot(title*" $numPairs"*" pairs",save,labels,
-	#nTerms, DMRGresults,
-	#nTerms, EDresults,
 	nTerms, pDiffs,
 	axisTitles = (xTitle, yTitle))
 end
 
-for i in 1:4
-makeTimeEDvDMRGEPlot(i,1,1,15)
-end
+
+makeTimeDMRGEPlot(5,1,1,25)
+
 #makeCorrelationPlot(2,1,10)
