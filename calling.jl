@@ -6,7 +6,7 @@ include("./dmrg/ladder.jl")
 include("./dmrg/operators.jl")
 
 include("./exact-diagonalisation/Hamiltonians.jl")
-include("./exact-diagonalisation/expectations.jl")
+include("./exact-diagonalisation/operators.jl")
 include("./exact-diagonalisation/exact-diagonalisation.jl")
 
 #displayED(Hamiltonians.ladderOneHalf(2,1,1),5)
@@ -62,7 +62,6 @@ function makeLegCouplingPlot(numPairs,gap,JrMax)
 	axisTitles = (xTitle, yTitle)
 	)
 end
-makeLegCouplingPlot(21,1,100)
 
 function makeMagnetismPlot(numPairs,gap,JrMax)
 	numSites = 2*numPairs
@@ -170,20 +169,20 @@ function makeCorrelationPlot(numPairs,Jl,Jr)
 end
 
 #TODO brah i need to take an expecation value too otherwise it just sits here ayo
-function makeTimeDMRGEPlot(numPairs, Jl, Jr, t)
+function makeTimeDMRGSzPlot(numPairs, Jl, Jr, t)
 	numSites = 2*numPairs
-	title = "difference in energy of state as time evolves vs initial energy"
+	title = "difference in Magnesitation of state as time evolves vs initial Magnetisation"
 	xTitle = "time evolved to"
-	yTitle = "Percent Difference"
+	yTitle = "Percent Difference (Mz/site)"
 	labels = []
 	save = true
 
-	DMRGresults = [0.0 for i in 1:t]
+	DMRGresults = [1.0*i for i in 1:t]
 	nTerms = [i for i in 1:t]
 	
 	for i in 1:t
 		psi, sites = timeEvoLadder(2*numPairs,1,1,t,0.1)
-		DMRGresults[i] = ladder(psi,sites,1,1)[1]
+		DMRGresults[i] = real(Sz(psi,sites))
 	end
 
 	pDiffs = [pdiff(DMRGresults[i],DMRGresults[1]) for i in 1:t]
@@ -194,6 +193,6 @@ function makeTimeDMRGEPlot(numPairs, Jl, Jr, t)
 end
 
 
-makeTimeDMRGEPlot(5,1,1,25)
+makeTimeDMRGSzPlot(5,1,1,25)
 
 #makeCorrelationPlot(2,1,10)

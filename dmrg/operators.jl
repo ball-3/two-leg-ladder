@@ -1,4 +1,4 @@
-function CustOp(sites, state, operators, sitesApplied, prodNum)	
+function CustOp(state, sites, operators, sitesApplied, prodNum)	
 	numSitesApplied = length(sitesApplied)
 	numOperators = length(operators)
 	
@@ -36,7 +36,7 @@ function CustOp(sites, state, operators, sitesApplied, prodNum)
 end
 
 #finds the expectation value of S^2 operator given a state
-function S2(sites, state)	
+function S2(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -57,7 +57,7 @@ function S2(sites, state)
 end
 
 #finds the expectation value of S_z operator given a state
-function Sz(sites, state)	
+function Sz(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -73,7 +73,7 @@ function Sz(sites, state)
 end
 
 #finds the expectation value of S_x operator given a state
-function Sx(sites, state)	
+function Sx(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -89,7 +89,7 @@ function Sx(sites, state)
 end
 
 #finds the expectation value of S_y operator given a state
-function Sy(sites, state)	
+function Sy(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -105,7 +105,7 @@ function Sy(sites, state)
 end
 
 #finds the expectation value of S^+ operator given a state
-function Splus(sites, state)	
+function Splus(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -121,7 +121,7 @@ function Splus(sites, state)
 end
 
 #finds the expectation value of S^- operator given a state
-function Sminus(sites, state)	
+function Sminus(state, sites)	
 	numSites = length(sites)
 	
 	os = OpSum()
@@ -132,6 +132,4 @@ function Sminus(sites, state)
 	op = MPO(os, sites)
 	
 	expVal = inner(state',op,state)
-	
-	return expVal/length(sites)
 end
