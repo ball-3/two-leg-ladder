@@ -3,9 +3,9 @@ module Hamiltonians
 include("kronecker-product.jl")
 include("pauli-matrices.jl")
 
-export heisenbergOneHalf, ladderOneHalf
+export heisenbergChain, heisenbergLadder
 
-function heisenbergOneHalf(spins::Integer, jl)
+function heisenbergChain(spins::Integer, jl)
 #a hamiltonian of H = JΣᵢSi(dot)Si+1 = JΣᵢ(1/2*SxiSxi+1 + 1/2*SyiSyi+1 SziSz+1) and all particles spin 1/2
 	dim = 2^spins
 	H = zeros(dim,dim)
@@ -21,7 +21,7 @@ function heisenbergOneHalf(spins::Integer, jl)
 	return H
 end
 
-function ladderOneHalf(pairs::Integer, Jl, Jr)
+function heisenbergLadder(pairs::Integer, Jl, Jr)
 	#settings:
 	hbar = 1
 	
