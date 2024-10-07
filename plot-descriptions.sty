@@ -1,44 +1,65 @@
 \documentclass[11pt]{article}
 \usepackage{graphicx, xfrac, adjustbox}
 
+\newenvironment{codefont}{\fontfamily{pcr}\selectfont}{\par}
+
 \setlength{\textwidth}{15.25cm} \setlength{\evensidemargin}{0cm}
 \setlength{\oddsidemargin}{0cm} \setlength{\textheight}{26cm}
 \setlength{\topmargin}{-1cm}
 
-\title{Two Leg Heisenberg Ladder - Plots}
+\title{Two Leg Ladder}
 \author{Erin Ball}
-\date{August 2024}
+\date{September 2024}
 
 \begin{document}
 \begin{center}
 \large
-\textbf{Non-Equilibrium Dynamics of Dimer Ladders - Plots}\\
+\textbf{Non-Equilibrium Dynamics of Dimer Ladders}\\
 Erin Ball
 \end{center}
+
+The purpose of this project is to simulate a two leg ladder, whose vertices represent spin-1/2 sites, and measure various properties of this simulated system. The matrix product state (MPS) method was used for the simulations, with exact diagonalisation (ED) used, when possible, as a baseline for comparison.\newline\vspace{5mm}
+
+As of September 2024, the project code is broken down into three folders:\begin{codefont} mps\end{codefont}, \begin{codefont} exact-diagonalisation\end{codefont}, and \begin{codefont} utility-functions\end{codefont}. Their components are as follows:
+\begin{itemize}
+    \item\begin{codefont} mps\end{codefont}:\newline
+    Contains code for simulations done with mps. Systems other than the ladder system are included here as they were, and may continue to be, useful for testing new features.
+    \begin{itemize}
+        \item \begin{codefont} chain.jl\end{codefont}\newline
+        used for making the hamiltonian [H] that represents the Heisenberg 1/2 spin chain, using the DMRG algorithm to find the ground state and ground state energy of the system.
+        \item \begin{codefont} ladder.jl\end{codefont}\newline
+        same as above, but for a ladder 1/2 system. This file also contains methods that are used for time evolution of the system. The hamiltonian is [H]
+        \item \begin{codefont} operators.jl\end{codefont}\newline
+        used to generate and apply some common MPOs as well as a general method for generating and applying any specified MPO
+    \end{itemize}
+    \item \begin{codefont} exact-diagonalisation\end{codefont}:\newline
+    Contains code for simulations done with ED as well as any ED specific helper functions.
+    \begin{itemize}
+        \item \begin{codefont} Hamiltonians.jl\end{codefont}\newline
+        contains methods that generate matrix representations of hamiltonians (chain, ladder) as well as a helper function for this process. Matrix representations from these methods are not optimised or compressed in any way, so this is only suitable for relatively small system sizes.
+        \item \begin{codefont} exact-diagonalisation\end{codefont}\newline
+        contains methods for finding the energy of a state, energy eigenvalues and eigenstates for a hamiltonian, and readable representations of energy eigenvalues and eigenstates
+        \item \begin{codefont} kronecker-product.jl\end{codefont}\newline
+        file contains the helper function kron(matrices...) which is used to compute the Kronecker product of states 	represented by matrices
+        \item \begin{codefont} operators.jl\end{codefont}\newline
+        contains methods to generate and then apply some common matrix representations of operators as well as a general method for generating and applying a matrix representation of any specified operator
+        \item \begin{codefont} pauli-matrices.jl\end{codefont}\newline
+        definitions of the Pauli matrices in matrix form
+    \end{itemize}
+    \item \begin{codefont} utility-functions\end{codefont}:
+    \begin{itemize}
+        \item \begin{codefont} comparison-functions.jl\end{codefont}\newline
+        contains functions for comparing values
+    \end{itemize}
+\end{itemize}
+\vspace{10mm}
+
+\textbf{Results}\\
 \normalsize
 \vspace{0.5cm}
-    \begin{figure}[htbp]
-    \centering
-    \adjustbox{valign=t}{\begin{minipage}{0.6\textwidth}
-        \includegraphics[width=\textwidth]{example-image-a.pdf}
-    \end{minipage}}
-    \hfill  
-\adjustbox{valign=t}{\begin{minipage}{0.35\textwidth}% changed <<<<
-        \includegraphics[width=\textwidth]{example-image-a.pdf}
-        \vfill
-    \end{minipage}} 
-    \begin{minipage}[t]{0.6\textwidth}
-        \caption{Caption 1.}
-        \label{fig1}
-    \end{minipage}%%%
-    \hfill
-    \begin{minipage}[t]{0.35\textwidth}
-        \caption{Caption 2.}
-        \label{fig2}
-    \end{minipage}
-\end{figure}  
+ 
 \begin{figure}[h]
-    \caption{comparison of using exact diagonalisation and mps methods for 6 spins}
+    \caption{comparison of using exact diagonalisation and MPS methods for 6 spins}
     \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
         \includegraphics[width=\textwidth]{correlations by site pairA.png}
         \vfill
@@ -56,7 +77,7 @@ Erin Ball
     \label{symmetriesEDvsMPS}
 \end{figure}
 \begin{figure}[h]
-    \caption{checking symmetries using mps method for various number of spin pairs}
+    \caption{checking symmetries using MPS method for various number of spin pairs}
     \centering
     \includegraphics[width=0.45\textwidth]{correlations by site pair11pairs.png}
     %generated using "makeCorrelationPlot(11,1,1)" in "calling.jl", in aug 7th push
@@ -69,7 +90,7 @@ Erin Ball
     %generated using "makeCorrelationPlot(51,1,1)" in "calling.jl", in aug 7th push
     \label{symmetries}
 \end{figure}
-Note that the left and right half of the ladder are overlayed to show the symmetry - x value of 1 corresponds to the 1st and last pair, 2 corresponds to the second and second to last pair. see makecorrelationplot function for further detail.\newline
+Note that the left and right half of the ladder are overlayed to show the symmetry - x value of 1 corresponds to the 1st and last pair, 2 corresponds to the second and second to last pair. see makecorrelationplot function for further detail.\vspace{5mm}
 The following plots are made for comparison to figures 4 and 5 in:\newline
 Ground-state magnetic properties of spin ladder-shaped quantum nanomagnet: Exact diagonalization study\newline
 K. Szałowski, P. Kowalewska\newline
@@ -89,14 +110,85 @@ https://doi.org/10.1016/j.jmmm.2017.12.076\newline
         \includegraphics[width=\textwidth, height=6.2cm]{Screenshot from 2024-08-07 14-31-37.png}
         \vfill
     \end{minipage}} 
-    \begin{minipage}[t]{0.5\textwidth}
+    \begin{minipage}[t]{0.49\textwidth}
         \caption{Caption 1.}
-        \label{fig1}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.5\textwidth}
+    \begin{minipage}[t]{0.49\textwidth}
         \caption{Caption 2.}
-        \label{fig2}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{average leg pair correlation as a function of coupling strength21pairs.png}
+        %generated using "makeRungCouplingPlot(21,1,100)", in Aug 8th push
+        \vfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.02\textwidth} 
+       \hfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{average leg pair correlation as a function of coupling strength51pairs.png}
+        %generated using "makeRungCouplingPlot(51,1,10)", in Aug 8th push
+        \vfill
+    \end{minipage}} 
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 1.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 2.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \adjustbox{valign=t}{\begin{minipage}{0.43\textwidth}
+        \includegraphics[width=\textwidth]{MMM-fig5-using-MPO-A.png}
+        %generated using "makeLegCouplingPlot(21,1,100)", in Aug 8th push
+        \includegraphics[width=\textwidth, height = 0mm]{whtie.jpg}
+        \includegraphics[width=\textwidth]{MMM-fig5-using-MPO-B.png}
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.01\textwidth} 
+       \hfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.53\textwidth}
+        \includegraphics[width=\textwidth, height = 10.4cm]{Screenshot from 2024-08-07 14-31-52.png}
+        %generated using "makeLegCouplingPlot(51,1,10)", in Aug 8th push
+        \vfill
+    \end{minipage}} 
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 1.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 2.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{average rung pair correlation as a function of coupling strength21pairs.png}
+        %generated using "makeLegCouplingPlot(21,1,100)", in Aug 8th push
+        \vfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.02\textwidth} 
+       \hfill
+    \end{minipage}}
+    \adjustbox{valign=t}{\begin{minipage}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{average rung pair correlation as a function of coupling strength51pairs.png}
+        %generated using "makeLegCouplingPlot(51,1,10)", in Aug 8th push
+        \vfill
+    \end{minipage}} 
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 1.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \caption{Caption 2.}
     \end{minipage}
 \end{figure}
 
