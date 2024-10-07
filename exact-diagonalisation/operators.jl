@@ -105,7 +105,7 @@ function buildOperator(operators, sitesApplied, dim)
 end
 
 #currently for only ground state
-#TODO adjust E value at each 'step'
+#TODO steps?
 function timeEvolution(tMax, H)
 	diag = ED(H)
 	E = diag[1][1]

@@ -1,9 +1,9 @@
 include("./utility-functions/comparison-functions.jl")
 include("plotting.jl")
 
-include("./dmrg/chain.jl")
-include("./dmrg/ladder.jl")
-include("./dmrg/operators.jl")
+include("./mps/chain.jl")
+include("./mps/ladder.jl")
+include("./mps/operators.jl")
 
 include("./exact-diagonalisation/Hamiltonians.jl")
 include("./exact-diagonalisation/operators.jl")
